@@ -1,0 +1,22 @@
+<div class="dijitDialog" role="dialog" aria-labelledby="${id}_title">
+    <div data-dojo-attach-point="titleBar" class="dijitDialogTitleBar">
+        <span data-dojo-attach-point="titleNode" class="dijitDialogTitle" id="${id}_title" role="heading" level="1"></span>
+        <span data-dojo-attach-point="closeButtonNode" class="dijitDialogCloseIcon" data-dojo-attach-event="ondijitclick: onCancel" title="${buttonCancel}" role="button" tabindex="0">
+			<span data-dojo-attach-point="closeText" class="closeText" title="${buttonCancel}">x</span>
+        </span>
+    </div>
+    <div data-dojo-attach-point="containerNode" class="dijitDialogPaneContent">
+        Type: <span data-dojo-attach-point="geomTypeNode"></span>
+        <br>
+        <span data-dojo-attach-point="infoNode"></span>
+        <br>
+        <span data-dojo-attach-point="unitsNode" class="hardcider-click">Units</span>
+        <pre data-dojo-attach-point="jsonNode" class="hardcider-json-pre"></pre>
+        <span data-dojo-attach-point="convertNode" data-type="json" data-dojo-attach-event="click: convertJson" class="hardcider-click">View as GeoJSON</span>
+        &nbsp;&nbsp;
+        <span data-dojo-attach-event="click: selectJson" class="hardcider-click">Select JSON</span>
+        <div class="hardcider-dialog-close">
+            <span data-dojo-attach-event="click: onCancel" class="hardcider-click">Close</span>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,55 @@
+<div class="dijitDialog" role="dialog" aria-labelledby="${id}_title">
+    <div data-dojo-attach-point="titleBar" class="dijitDialogTitleBar">
+        <span data-dojo-attach-point="titleNode" class="dijitDialogTitle" id="${id}_title" role="heading" level="1"></span>
+        <span data-dojo-attach-point="closeButtonNode" class="dijitDialogCloseIcon" data-dojo-attach-event="ondijitclick: onCancel" title="${buttonCancel}" role="button" tabindex="0">
+            <span data-dojo-attach-point="closeText" class="closeText" title="${buttonCancel}">x</span>
+        </span>
+    </div>
+    <div data-dojo-attach-point="containerNode" class="dijitDialogPaneContent">
+        <table>
+            <tr>
+                <td>
+                    Project Name
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <input data-dojo-attach-point="nameNode" data-dojo-type="dijit/form/ValidationTextBox" data-dojo-props="required:true,style:'width:200px;'">
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    Project Description
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <input data-dojo-attach-point="descriptionNode" data-dojo-type="dijit/form/Textarea" data-dojo-props="style:'width:200px;'">
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    Save Location
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <select data-dojo-attach-point="locationNode" data-dojo-type="dijit/form/Select" data-dojo-props="style:'width:200px;'">
+                        <option value="Local">Local</option>
+                        <option value="Server">Server</option>
+                    </select>
+                </td>
+            </tr>
+            <tr>
+                <td class="hardcider-draw-dialog-no-heading">
+                    <input data-dojo-attach-point="includeNode" data-dojo-type="dijit/form/CheckBox" data-dojo-props="checked:true">&nbsp;Include Current Drawings
+                    <br>
+                    <div class="hardcider-warning-text" style="width:200px;">Current drawings will be deleted if not included in new project.</div>
+                </td>
+            </tr>
+        </table>
+        <div class="hardcider-dialog-close">
+            <span data-dojo-attach-point="createNode" class="hardcider-click">Create Project</span>&nbsp;&nbsp;&nbsp;<span data-dojo-attach-point="cancelNode" class="hardcider-click">Cancel</span>
+        </div>
+    </div>
+</div>

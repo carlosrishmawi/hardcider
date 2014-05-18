@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="Hard Cider">
+    <meta name="author" content="btfou">
+    <title>Hard Cider</title>
+    <link href="//fonts.googleapis.com/css?family=Open+Sans:400,600,800" rel="stylesheet">
+    <link href="//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.css" rel="stylesheet">
+    <link href="//js.arcgis.com/3.9/js/dojo/dijit/themes/claro/claro.css" rel="stylesheet">
+    <!--link href="//js.arcgis.com/3.9/js/dojo/dojox/layout/resources/FloatingPane.css" rel="stylesheet"-->
+    <!--link href="//js.arcgis.com/3.9/js/dojo/dojox/layout/resources/ResizeHandle.css" rel="stylesheet"-->
+    <link href="//js.arcgis.com/3.9/js/dgrid/css/dgrid.css" rel="stylesheet">
+    <link href="//js.arcgis.com/3.9/js/dgrid/css/skins/claro.css" rel="stylesheet">
+    <link href="//js.arcgis.com/3.9/js/esri/css/esri.css" rel="stylesheet">
+    <link href="js/hardcider/hardcider.css" rel="stylesheet">
+</head>
+<body class="claro">
+    <div id="loading">
+        <div id="loading-content">
+            <p style="margin:0;font-size:300%;font-weight:800;line-height:1;"><em>Hard Cider</em></p>
+            <p style="margin:12px 0;font-size:120%;font-weight:600;line-height:1;"><i class="fa fa-spinner fa-spin"></i>&nbsp;One moment while map loads...</p>
+            <p style="margin:12px 0;line-height:1;">Copyright &copy; 2014 Ben Fousek</p>
+        </div>
+    </div>
+    <div id="container"></div>
+    <script>
+        dojoConfig = {
+            async: true,
+            packages: [{
+                name: 'hardcider',
+                location: location.pathname.replace(/[^\/]+$/, '') + 'js/hardcider'
+            }, {
+                name: 'xtras',
+                location: location.pathname.replace(/[^\/]+$/, '') + 'js/xtras'
+            }]
+        };
+    </script>
+    <script src="//js.arcgis.com/3.9/"></script>
+    <script>
+        var dregs; //dev only
+        require(['hardcider/fermenter'], function (Fermenter) {
+            Fermenter.ferment('loading', 'container');
+            dregs = Fermenter;
+        });
+    </script>
+</body>
+</html>

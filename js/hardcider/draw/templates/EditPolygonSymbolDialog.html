@@ -1,0 +1,73 @@
+<div class="dijitDialog" role="dialog" aria-labelledby="${id}_title">
+    <div data-dojo-attach-point="titleBar" class="dijitDialogTitleBar">
+        <span data-dojo-attach-point="titleNode" class="dijitDialogTitle" id="${id}_title" role="heading" level="1"></span>
+        <span data-dojo-attach-point="closeButtonNode" class="dijitDialogCloseIcon" data-dojo-attach-event="ondijitclick: onCancel" title="${buttonCancel}" role="button" tabindex="0">
+            <span data-dojo-attach-point="closeText" class="closeText" title="${buttonCancel}">x</span>
+        </span>
+    </div>
+    <div data-dojo-attach-point="containerNode" class="dijitDialogPaneContent">
+        <table>
+            <tr>
+                <td>
+                    Style
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <select data-dojo-attach-point="styleNode" data-dojo-type="dijit/form/Select" data-dojo-props="style:'width:140px;'">
+                        <option value="esriSLSSolid">Solid</option>
+                        <option value="esriSLSDash">Dash</option>
+                        <option value="esriSLSDot">Dot</option>
+                        <option value="esriSLSDashDot">Dash Dot</option>
+                        <option value="esriSLSDashDotDot">Dash Dot Dot</option>
+                        <option value="esriSLSLongDash">Long Dash</option>
+                        <option value="esriSLSLongDashDot">Long Dash Dot</option>
+                        <option value="esriSLSShortDot">Short Dot</option>
+                        <option value="esriSLSShortDash">Short Dash</option>
+                        <option value="esriSLSShortDashDot">Short Dash Dot</option>
+                        <option value="esriSLSShortDashDotDot">Short Dash Dot Dot</option>
+                    </select>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    Width
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <select data-dojo-attach-point="widthNode" data-dojo-type="dijit/form/Select" data-dojo-props="style:'width:140px;'">
+                        <option value="1.5">Thin</option>
+                        <option value="3">Medium</option>
+                        <option value="4.5">Thick</option>
+                    </select>
+                </td>
+            </tr>
+            <tr>
+                <td class="hardcider-draw-edit-dialog-ddb">
+                    <div data-dojo-attach-point="colorDropDownNode" data-dojo-type="dijit/form/DropDownButton">
+                        <span>Color</span>
+                        <div data-dojo-attach-point="colorNode" data-dojo-type="dijit/ColorPalette"></div>
+                    </div>
+                    <div data-dojo-attach-point="fillDropDownNode" data-dojo-type="dijit/form/DropDownButton">
+                        <span>Fill</span>
+                        <div data-dojo-attach-point="fillNode" data-dojo-type="dijit/ColorPalette"></div>
+                    </div>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    Fill Opacity
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <div data-dojo-attach-point="opacityNode" data-dojo-type="dijit/form/HorizontalSlider" data-dojo-props="minimum: 0, maximum:1, discreteValues:11, showButtons:true, style:'width:140px;'"></div>
+                </td>
+            </tr>
+        </table>
+        <div class="hardcider-dialog-close">
+            <span data-dojo-attach-event="click: _updateSymbol" class="hardcider-click">Apply</span>&nbsp;&nbsp;&nbsp;<span data-dojo-attach-event="click: update" class="hardcider-click">Update</span>&nbsp;&nbsp;&nbsp;<span data-dojo-attach-event="ondijitclick: onCancel" class="hardcider-click">Close</span>
+        </div>
+    </div>
+</div>

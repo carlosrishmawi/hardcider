@@ -1,0 +1,126 @@
+<div>
+    <table class="hardcider-iquert-query-builder">
+        <tr>
+            <td colspan="2">
+                Layer
+            </td>
+        </tr>
+        <tr>
+            <td colspan="2">
+                <select data-dojo-attach-point="querySelectNode" data-dojo-type="dijit/form/Select" data-dojo-props="style:'width:100%', maxHeight: -1"></select>
+            </td>
+        </tr>
+        <tr>
+            <td colspan="2">
+                Fields
+            </td>
+        </tr>
+        <tr>
+            <td colspan="2">
+                <div data-dojo-attach-point="fieldListNode" class="hardcider-iquert-query-builder-fields"></div>
+            </td>
+        </tr>
+        <tr valign="top">
+            <td class="hardcider-iquert-query-builder-button-grid">
+                <table>
+                    <tr>
+                        <td colspan="3">
+                            Operators
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <div data-dojo-type="dijit/form/Button" data-dojo-attach-event="click: _addOperator" data-dojo-props="value:'='">=</div>
+                        </td>
+                        <td>
+                            <div data-dojo-type="dijit/form/Button" data-dojo-attach-event="click: _addOperator" data-dojo-props="value:'<>'"><></div>
+                        </td>
+                        <td>
+                            <div data-dojo-type="dijit/form/Button" data-dojo-attach-event="click: _addOperator" data-dojo-props="value:'LIKE'">LIKE</div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <div data-dojo-type="dijit/form/Button" data-dojo-attach-event="click: _addOperator" data-dojo-props="value:'>'">></div>
+                        </td>
+                        <td>
+                            <div data-dojo-type="dijit/form/Button" data-dojo-attach-event="click: _addOperator" data-dojo-props="value:'>='">>=</div>
+                        </td>
+                        <td>
+                            <div data-dojo-type="dijit/form/Button" data-dojo-attach-event="click: _addOperator" data-dojo-props="value:'AND'">AND</div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <div data-dojo-type="dijit/form/Button" data-dojo-attach-event="click: _addOperator" data-dojo-props="value:'<'">
+                                <</div>
+                        </td>
+                        <td>
+                            <div data-dojo-type="dijit/form/Button" data-dojo-attach-event="click: _addOperator" data-dojo-props="value:'<='">
+                                <=</div>
+                        </td>
+                        <td>
+                            <div data-dojo-type="dijit/form/Button" data-dojo-attach-event="click: _addOperator" data-dojo-props="value:'OR'">OR</div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <div data-dojo-type="dijit/form/Button" data-dojo-attach-event="click: _addOperator" data-dojo-props="value:'_'">_</div>
+                        </td>
+                        <td>
+                            <div data-dojo-type="dijit/form/Button" data-dojo-attach-event="click: _addOperator" data-dojo-props="value:'%'">%</div>
+                        </td>
+                        <td>
+                            <div data-dojo-type="dijit/form/Button" data-dojo-attach-event="click: _addOperator" data-dojo-props="value:'NOT'">NOT</div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <div data-dojo-type="dijit/form/Button" data-dojo-attach-event="click: _addOperator" data-dojo-props="value:'()'">( )</div>
+                        </td>
+                        <td>
+                            <div data-dojo-type="dijit/form/Button" data-dojo-attach-event="click: _addOperator" data-dojo-props="value:'NULL'">NULL</div>
+                        </td>
+                        <td>
+                            <div data-dojo-type="dijit/form/Button" data-dojo-attach-event="click: _addOperator" data-dojo-props="value:'IS'">IS</div>
+                        </td>
+                    </tr>
+                </table>
+            </td>
+            <td>
+                <div class="hardcider-iquert-query-builder-values-label">Values</div>
+                <div data-dojo-attach-point="valueListNode" class="hardcider-iquert-query-builder-values"></div>
+                <span data-dojo-attach-event="click: _setFieldValues" class="hardcider-click">Get Values</span>
+            </td>
+        </tr>
+        <tr>
+            <td colspan="2">
+                <textarea data-dojo-type="dijit/form/Textarea" data-dojo-attach-point="whereNode" data-dojo-props="placeholder:'Build your query!'" class="hardcider-iquert-query-builder-where"></textarea>
+            </td>
+        </tr>
+        <tr>
+            <td colspan="2">
+                Spatial Filter
+            </td>
+        </tr>
+        <tr>
+            <td colspan="2">
+                <input data-dojo-type="dijit/form/RadioButton" data-dojo-props="name:'hardcider_query_builder_spatial_filter', checked:true">&nbsp;None&nbsp;
+                <input data-dojo-type="dijit/form/RadioButton" data-dojo-props="name:'hardcider_query_builder_spatial_filter', checked:false" data-dojo-attach-point="spatialFilterMapNode">&nbsp;Map&nbsp;
+                <input data-dojo-type="dijit/form/RadioButton" data-dojo-props="name:'hardcider_query_builder_spatial_filter', checked:false" data-dojo-attach-point="spatialFilterCustomNode">&nbsp;<span data-dojo-attach-point="spatialFilterMenuNode" class="hardcider-click">Custom</span>
+            </td>
+        </tr>
+        <tr>
+            <td colspan="2">
+                <div data-dojo-type="dijit/form/Button" data-dojo-attach-event="click: query" data-dojo-props="label:'Query'"></div>
+                <div data-dojo-type="dijit/form/Button" data-dojo-attach-event="click: _verifyQuery" data-dojo-props="label:'Verify'"></div>
+                <div data-dojo-type="dijit/form/Button" data-dojo-attach-event="click: _clearWhere" data-dojo-props="label:'Clear'"></div>
+            </td>
+        </tr>
+        <tr>
+            <td colspan="2">
+                <span data-dojo-attach-point="infoNode"></span>
+            </td>
+        </tr>
+    </table>
+</div>

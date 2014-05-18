@@ -1,0 +1,30 @@
+<div class="hardcider-iquert-results">
+    <table class="hardcider-iquert-results-controls">
+        <tr>
+            <td colspan="3" data-dojo-attach-point="infoNode">No Results</td>
+        </tr>
+        <tr>
+            <td colspan="3">
+                <span data-dojo-attach-event="click: zoomTo" class="hardcider-click" title="Zoom to selected result">Zoom To</span>
+                &nbsp;&nbsp;
+                <span data-dojo-attach-event="click: zoomToAll" class="hardcider-click" title="Zoom to all results">Zoom All</span>
+                &nbsp;&nbsp;
+                <span data-dojo-attach-point="optionsNode" class="hardcider-click" title="Data export and other options">Options</span>
+                &nbsp;&nbsp;
+                <span data-dojo-attach-event="click: clear" class="hardcider-click" title="Clear results">Clear</span>
+            </td>
+        </tr>
+        <tr>
+            <td class="hardcider-iquert-results-pager-left">
+                <span data-dojo-attach-event="click: previous" class="hardcider-click" title="Previous result"><i class="fa fa-arrow-left"></i> Previous</span>
+            </td>
+            <td class="hardcider-iquert-results-counter">
+                <span data-dojo-attach-point="countNode">0</span>&nbsp;of&nbsp;<span data-dojo-attach-point="totalNode">0</span>&nbsp;Results
+            </td>
+            <td class="hardcider-iquert-results-pager-right">
+                <span data-dojo-attach-event="click: next" class="hardcider-click"  title="Next result">Next <i class="fa fa-arrow-right"></i></span>
+            </td>
+        </tr>
+    </table>
+    <div data-dojo-attach-point="stackNode" class="hardcider-iquert-results-stack"></div>
+</div>

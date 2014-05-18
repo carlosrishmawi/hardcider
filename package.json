@@ -1,0 +1,17 @@
+{
+    "name": "hardcider",
+    "version": "0.1.0",
+    "author": "Ben Fousek",
+    "license": "MIT",
+    "year": "2014",
+    "homepage": "https://github.com/btfou/hardcider",
+    "repository": "https://github.com/btfou/hardcider",
+    "dependencies": {
+        "grunt": "0.x.x",
+        "grunt-contrib-jshint": "0.6.x",
+        "jshint-stylish": "0.2.x",
+        "grunt-jsbeautifier": "0.2.x",
+        "grunt-contrib-watch": "0.5.x"
+    },
+    "engine": "node >= 0.10"
+}

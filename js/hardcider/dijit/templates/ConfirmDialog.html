@@ -1,0 +1,14 @@
+<div class="dijitDialog hardcider-dialog" role="dialog" aria-labelledby="${id}_title">
+    <div data-dojo-attach-point="titleBar" class="dijitDialogTitleBar">
+        <span data-dojo-attach-point="titleNode" class="dijitDialogTitle" id="${id}_title" role="heading" level="1"></span>
+        <span data-dojo-attach-point="closeButtonNode" class="dijitDialogCloseIcon" data-dojo-attach-event="ondijitclick: onCancel" title="${buttonCancel}" role="button" tabindex="0">
+			<span data-dojo-attach-point="closeText" class="closeText" title="${buttonCancel}">x</span>
+        </span>
+    </div>
+    <div data-dojo-attach-point="containerNode" class="dijitDialogPaneContent">
+        <span data-dojo-attach-point="messageNode"></span>
+        <div class="hardcider-dialog-close">
+            <span data-dojo-attach-event="click: confirmed" class="hardcider-click">OK</span>&nbsp;&nbsp;&nbsp;<span data-dojo-attach-event="click: canceled" class="hardcider-click">Cancel</span>
+        </div>
+    </div>
+</div>

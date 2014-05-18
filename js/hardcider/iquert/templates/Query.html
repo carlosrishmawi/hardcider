@@ -1,0 +1,71 @@
+<div>
+    <form data-dojo-attach-point="formNode" data-dojo-type="dijit/form/Form" action="javascript:void(0)" method="">
+        <table class="hardcider-iquert-query">
+            <tr>
+                <td>
+                    Layer
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <select data-dojo-attach-point="querySelectNode" data-dojo-type="dijit/form/Select" data-dojo-props="style:'width:100%;', maxHeight: -1"></select>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    Field
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <select data-dojo-attach-point="fieldSelectNode" data-dojo-type="dijit/form/Select" data-dojo-props="style:'width:100%;', maxHeight: -1"></select>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    Operator
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <select data-dojo-attach-point="operatorSelectNode" data-dojo-type="dijit/form/Select" data-dojo-props="style:'width:100%;', maxHeight:-1"></select>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    Value
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <div data-dojo-attach-point="valueContainerNode" data-dojo-type="dijit/layout/ContentPane" data-dojo-props="style:'padding:0;width:100%;'">
+                        <input data-dojo-attach-point="textValueNode" data-dojo-type="dijit/form/TextBox" data-dojo-props="placeHolder:'Enter query value', style:'width:99%;'">
+                        <input data-dojo-attach-point="numberValueNode" data-dojo-type="dijit/form/NumberTextBox" data-dojo-props="invalidMessage:'Please enter a vaild number', placeHolder:'Enter query value (number)', style:'width:99%;display:none;'">
+                        <input data-dojo-attach-point="dateValueNode" data-dojo-type="dijit/form/DateTextBox" data-dojo-props="invalidMessage:'Please enter a vaild date', placeHolder:'Enter query value (date)', style:'width:99%;display:none;'">
+                        <select data-dojo-attach-point="codedDomainValueNode" data-dojo-type="dijit/form/Select" data-dojo-props="style:'width:99%;display:none;', maxHeight:-1"></select>
+                    </div>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    Spatial Filter
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <input data-dojo-type="dijit/form/RadioButton" data-dojo-props="name:'hardcider_query_spatial_filter', checked:true">&nbsp;None&nbsp;
+                    <input data-dojo-type="dijit/form/RadioButton" data-dojo-props="name:'hardcider_query_spatial_filter', checked:false" data-dojo-attach-point="spatialFilterMapNode">&nbsp;Map&nbsp;
+                    <input data-dojo-type="dijit/form/RadioButton" data-dojo-props="name:'hardcider_query_spatial_filter', checked:false" data-dojo-attach-point="spatialFilterCustomNode">&nbsp;<span data-dojo-attach-point="spatialFilterMenuNode" class="hardcider-click">Custom</span>
+                </td>
+            </tr>
+            <tr>
+                <td colspan="2">
+                    <div data-dojo-type="dijit/form/Button" data-dojo-props="type: 'submit', label: 'Query'"></div>
+                </td>
+            </tr>
+            <tr>
+                <td data-dojo-attach-point="infoNode"></td>
+            </tr>
+        </table>
+    </form>
+</div>

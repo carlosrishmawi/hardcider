@@ -1,0 +1,51 @@
+<div class="dijitDialog" role="dialog" aria-labelledby="${id}_title">
+    <div data-dojo-attach-point="titleBar" class="dijitDialogTitleBar">
+        <span data-dojo-attach-point="titleNode" class="dijitDialogTitle" id="${id}_title" role="heading" level="1"></span>
+        <span data-dojo-attach-point="closeButtonNode" class="dijitDialogCloseIcon" data-dojo-attach-event="ondijitclick: onCancel" title="${buttonCancel}" role="button" tabindex="0">
+            <span data-dojo-attach-point="closeText" class="closeText" title="${buttonCancel}">x</span>
+        </span>
+    </div>
+    <div data-dojo-attach-point="containerNode" class="dijitDialogPaneContent">
+        <table>
+            <tr>
+                <td>
+                    Style
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <select data-dojo-attach-point="styleNode" data-dojo-type="dijit/form/Select" data-dojo-props="style:'width:140px;'">
+                        <option value="esriSMSCircle">Circle</option>
+                        <option value="esriSMSSquare">Square</option>
+                        <option value="esriSMSDiamond">Diamond</option>
+                    </select>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    Size
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <select data-dojo-attach-point="sizeNode" data-dojo-type="dijit/form/Select" data-dojo-props="style:'width:140px;'">
+                        <option value="7.5">Small</option>
+                        <option value="10.5">Medium</option>
+                        <option value="13.5">Large</option>
+                    </select>
+                </td>
+            </tr>
+            <tr>
+                <td class="hardcider-draw-edit-dialog-ddb">
+                    <div data-dojo-attach-point="colorDropDownNode" data-dojo-type="dijit/form/DropDownButton">
+                        <span>Color</span>
+                        <div data-dojo-attach-point="colorNode" data-dojo-type="dijit/ColorPalette"></div>
+                    </div>
+                </td>
+            </tr>
+        </table>
+        <div class="hardcider-dialog-close">
+            <span data-dojo-attach-event="click: _updateSymbol" class="hardcider-click">Apply</span>&nbsp;&nbsp;&nbsp;<span data-dojo-attach-event="click: update" class="hardcider-click">Update</span>&nbsp;&nbsp;&nbsp;<span data-dojo-attach-event="ondijitclick: onCancel" class="hardcider-click">Close</span>
+        </div>
+    </div>
+</div>
