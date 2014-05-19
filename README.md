@@ -18,8 +18,8 @@ Questions, comments and issues are welcome [here](https://github.com/btfou/hardc
 ####Notes
 
 * Hard Cider's intended use is an internal viewer for organizations with ArcGIS Server, and for deploying custom tasks and functionalities therein. If you are looking for a viewer for the web, with better documentation and support, check out David Spriggs' [ConfigurableViewerJSAPI](https://github.com/DavidSpriggs/ConfigurableViewerJSAPI).
-* Hard Cider is in no way mobile friendly. It is a desktop application.
-* Hard Cider uses Dojo's claro theme with a few css tweaks to improve the look and maximize screen real estate for the map. Its beauty is derived from its simplicity and functionality.
+* Hard Cider is mobile and touch friendly, but is primarily a desktop application. Not the best for small screens. Not yet thoroughly tested on touch devices. The map's right-click menu can be accessed on touch devices with a long press.
+* Hard Cider uses Dojo's claro theme with a few css tweaks to improve/simplify the look and maximize screen real estate for the map. Its beauty is derived from its simplicity and functionality.
 * I am not very good about commenting. I'm working on it.
 * Internet Explorer made an enemy of me long ago. Some say it's improved. I wouldn't know. I'm coming up on 6 years without having even opened it once. With any luck that streak will continue into eternity when I die. I've done my darndest to write Hard Cider with best practices, and it's lint free. Please don't concern me with IE only problems.
 
