@@ -86,7 +86,7 @@ define([
                 content: '<div id="add-layers-web-tiled"></div>'
             }));
             this.addLayersTab.addChild(new CP({
-                title: 'CSV',
+                title: 'CSV File',
                 content: '<div id="add-layers-csv"></div>'
             }));
             this.addLayersTab.addChild(new CP({
@@ -98,7 +98,7 @@ define([
                 content: '<div id="add-layers-shape"></div>'
             }));
             this.addLayersTab.addChild(new CP({
-                title: 'File Geodatabase (GDB)',
+                title: 'Geodatabase (GDB) Feature Classes',
                 content: '<div id="add-layers-gdb"></div>'
             }));
             this.layersTab.addChild(this.addLayersTab);

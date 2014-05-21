@@ -25,9 +25,7 @@ define([
     'esri/geometry/Extent',
     'esri/dijit/Geocoder',
     'xtras/Blob',
-    'xtras/FileSaver',
-    'xtras/terraformer-1.0.3.min',
-    'xtras/terraformer-arcgis-parser-1.0.3.min'
+    'xtras/FileSaver'
 ], function(
     array,
     lang,

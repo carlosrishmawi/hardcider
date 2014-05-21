@@ -26,6 +26,8 @@
         </div>
     </div>
     <div id="container"></div>
+    <script src="//cdn-geoweb.s3.amazonaws.com/terraformer/1.0.3/terraformer.min.js"></script>
+    <script src="//cdn-geoweb.s3.amazonaws.com/terraformer-arcgis-parser/1.0.3/terraformer-arcgis-parser.min.js"></script>
     <script>
         dojoConfig = {
             async: true,
@@ -41,7 +43,13 @@
     <script src="//js.arcgis.com/3.9/"></script>
     <script>
         var dregs; //dev only
-        require(['hardcider/fermenter'], function (Fermenter) {
+        require([
+            'hardcider/fermenter',
+            //uncomment and remove corresponding script tags for jso build
+            //'//cdn-geoweb.s3.amazonaws.com/terraformer/1.0.3/terraformer.min.js',
+            //'//cdn-geoweb.s3.amazonaws.com/terraformer-arcgis-parser/1.0.3/terraformer-arcgis-parser.min.js',
+            'dojo/domReady!'
+        ], function (Fermenter) {
             Fermenter.ferment('loading', 'container');
             dregs = Fermenter;
         });

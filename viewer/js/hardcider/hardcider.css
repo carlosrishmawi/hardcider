@@ -380,11 +380,7 @@ p {
 .hardcider-layer-indent {
     padding-left: 20px;
 }
-.hardcider-layer-icon {
-    /*font-size:115%;*/
-    ;
-}
-.hardcider-layer-icon-expand {
+.hardcider-layer-icon {} .hardcider-layer-icon-expand {
     font-size: 115%;
 }
 .hardcider-layer-legend tr {
@@ -524,4 +520,16 @@ p {
 }
 .hardcider-draw-load-grid .dgrid-row {
     cursor: pointer;
+}
+/* add layers */
+
+.hardcider-add-layer {
+    max-width: 400px;
+}
+.hardcider-add-layer-gdb-layers {
+    padding: 0 8px;
+    border: 1px solid #B5BCC7;
+}
+.hardcider-add-layer-gdb-layer {
+    margin: 6px 0;
 }

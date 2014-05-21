@@ -8,8 +8,8 @@ define([
     'dojo/Deferred',
     'dojo/_base/declare',
     'dojo/_base/lang',
-    'xtras/pouchdb-2.1.0.min',
-    'xtras/es5-shim.min'
+    'xtras/pouchdb-2_1_0_min',
+    'xtras/es5-shim_min'
 ], function(
     Deferred,
     declare,
