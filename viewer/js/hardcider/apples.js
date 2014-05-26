@@ -45,26 +45,32 @@ define(['esri/geometry/Extent'], function(Extent) {
             //}
         },
         overlays: [{
+            type: 'webTiled',
+            id: 'stamentoner',
+            template: 'http://${subDomain}.tile.stamen.com/toner/${level}/${col}/${row}.jpg',
+            name: 'Stamen Toner',
+            subDomains: ['a', 'b', 'c', 'd'],
+            copyright: 'Map tiles by <a href="http://stamen.com">Stamen Design</a>, under <a href="http://creativecommons.org/licenses/by/3.0">CC BY 3.0</a>. Data by <a href="http://openstreetmap.org">OpenStreetMap</a>, under <a href="http://creativecommons.org/licenses/by-sa/3.0">CC BY SA</a>.'
+        }, {
+            type: 'tiled',
+            id: 'oregonstreet',
+            url: 'http://navigator.state.or.us/arcgis/rest/services/BaseMaps/BaseMap_Streets_Cache_WM/MapServer',
+            name: 'Oregon Street Map'
+        }, {
             type: 'dynamic',
             id: 'oregonhydro',
             url: 'http://navigator.state.or.us/arcgis/rest/services/Framework/Hydro_GeneralMap_WM/MapServer',
-            name: 'Oregon Hydrography',
-            identify: true,
-            query: true
+            name: 'Oregon Hydrography'
         }, {
             type: 'dynamic',
             id: 'femaflood',
             url: 'http://hazards.fema.gov/gis/nfhl/rest/services/public/NFHL/MapServer',
-            name: 'FEMA Flood',
-            identify: true,
-            query: true
+            name: 'FEMA Flood'
         }, {
             type: 'dynamic',
             id: 'oregonadmin',
             url: 'http://navigator.state.or.us/arcgis/rest/services/Framework/Admin_Bounds_WM/MapServer',
-            name: 'Oregon Administrative Boundaries',
-            identify: true,
-            query: true
+            name: 'Oregon Administrative Boundaries'
         }],
         features: [{
             type: 'feature',
@@ -77,9 +83,14 @@ define(['esri/geometry/Extent'], function(Extent) {
                 type: 'custom',
                 title: '${marketnam}',
                 content: '<div class="popupInfoWrapper">Location: ${location}<br>City: ${city}<br>County: ${county}<br>Season: ${season}<br>Days: ${days}<br>Hours: ${hours}</div>'
-            },
-            visible: false,
-            opacity: 1
+            }
+        }, {
+            type: 'feature',
+            id: 'oregonfirestations',
+            url: 'http://navigator.state.or.us/arcgis/rest/services/Framework/Prep_GeneralMap/MapServer/1',
+            name: 'Oregon Fire Stations',
+            mode: 1,
+            outFields: ['*']
         }]
     };
 });

@@ -14,8 +14,8 @@ define([
     'hardcider/iquert/IQueRT',
     'hardcider/draw/Draw',
     'hardcider/draw/DrawProjects',
-    'hardcider/layers/OverlayContainer',
-    'hardcider/layers/FeatureContainer',
+    'hardcider/dijit/OverlayControlContainer',
+    'hardcider/dijit/VectorControlContainer',
     'hardcider/dijit/Measure',
     'dijit/form/Button',
     'dijit/form/DropDownButton',
@@ -23,9 +23,7 @@ define([
     'dijit/Menu',
     'dijit/MenuItem',
     'esri/geometry/Extent',
-    'esri/dijit/Geocoder',
-    'xtras/Blob',
-    'xtras/FileSaver'
+    'esri/dijit/Geocoder'
 ], function(
     array,
     lang,
@@ -38,8 +36,8 @@ define([
     IQueRT,
     Draw,
     DrawProjects,
-    OverlayContainer,
-    FeatureContainer,
+    OverlayControlContainer,
+    VectorControlContainer,
     Measure,
     Button,
     DropDownButton,
@@ -58,25 +56,35 @@ define([
             //build layout
             this.layout = new CiderPress(applicationNode);
             this.layout.press();
+
             //the map
             this.map = new PintGlass('map-panel', apples.map);
+
             //let's do the rest after map loads
+            //so many classes require a loaded map
+            //this prevents all map not loaded errors 
             this.map.on('load', lang.hitch(this, function(r) {
+                //the map and layout objects
                 var map = r.map,
                     layout = this.layout;
-                //add overlay and feature containers
-                this.overlayContainer = new OverlayContainer({
+
+                //add overlay control container
+                this.overlayControlContainer = new OverlayControlContainer({
                     map: map,
                     basemapCount: map.basemaps.count
                 }, 'layers-overlays');
-                this.featureContainer = new FeatureContainer({
-                    map: map
-                }, 'layers-features');
 
-                //draw
+                //add vector control container
+                this.vectorControlContainer = new VectorControlContainer({
+                    map: map, //the map
+                    includeDrawLayers: true //init and add draw layers (true by default)
+                }, 'layers-features');
+                this.vectorControlContainer.startup();
+
+                //the draw module
                 this.draw = new Draw({
-                    map: map,
-                    drawLayers: this.featureContainer.drawLayers
+                    map: map, //the map
+                    drawLayers: this.vectorControlContainer.drawLayers
                 });
                 var draw = this.draw;
                 this.drawProjects = new DrawProjects({
@@ -87,7 +95,7 @@ define([
                 });
 
                 //iquert
-                this.featureContainer.addLayer({
+                this.vectorControlContainer.addLayer({
                     type: 'application',
                     id: 'gl_iquert_results',
                     print: false
@@ -117,15 +125,17 @@ define([
                     }
                 });
                 //set layer container iquert
-                this.overlayContainer.iquert = this.iquert;
-                this.featureContainer.iquert = this.iquert;
+                this.overlayControlContainer.iquert = this.iquert;
+                //this.featureContainer.iquert = this.iquert;
 
-                //load layers
+                //load overlay layers
                 array.forEach(apples.overlays, function(overlay) {
-                    this.overlayContainer.addLayer(overlay);
+                    this.overlayControlContainer.addLayer(overlay);
                 }, this);
+
+                //load vector layers
                 array.forEach(apples.features, function(feature) {
-                    this.featureContainer.addLayer(feature);
+                    this.vectorControlContainer.addLayer(feature);
                 }, this);
 
                 //geocoder
@@ -375,6 +385,7 @@ define([
                     title: 'Draw options',
                     dropDown: this.draw.optionsMenu
                 }));
+
                 //fade out and destroy loading screen
                 setTimeout(function() {
                     baseFx.fadeOut({

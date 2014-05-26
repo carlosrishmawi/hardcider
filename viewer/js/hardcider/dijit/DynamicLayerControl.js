@@ -6,7 +6,6 @@ define([
     'dojo/_base/declare',
     'dojo/_base/lang',
     'dojo/_base/array',
-    'dojo/Evented',
     'dojo/on',
     'dojo/query',
     'dojo/dom-class',
@@ -22,25 +21,19 @@ define([
     'dijit/PopupMenuItem',
     'dijit/MenuSeparator',
     'dijit/TooltipDialog',
-    //'dijit/Dialog',
     'dijit/form/CheckBox',
     'dijit/form/HorizontalSlider',
     'dijit/form/HorizontalRuleLabels',
     'esri/layers/ImageParameters',
     'esri/layers/ArcGISDynamicMapServiceLayer',
-    'esri/layers/ArcGISTiledMapServiceLayer',
-    'esri/layers/WebTiledLayer',
-    'esri/tasks/ProjectParameters',
-    'esri/config',
     'hardcider/utility/esri-rest',
-    'dojo/text!hardcider/layers/templates/OverlayFolder.html',
-    'dojo/text!hardcider/layers/templates/OverlaySublayer.html',
-    'dojo/text!hardcider/layers/templates/Overlay.html'
+    'dojo/text!hardcider/dijit/templates/LayerControl.html',
+    'dojo/text!hardcider/dijit/templates/DynamicFolderControl.html',
+    'dojo/text!hardcider/dijit/templates/DynamicSublayerControl.html'
 ], function(
     declare,
     lang,
     array,
-    Evented,
     on,
     query,
     domClass,
@@ -56,63 +49,63 @@ define([
     PopupMenuItem,
     MenuSeparator,
     TooltipDialog,
-    //Dialog,
     CheckBox,
     HorizontalSlider,
     HorizontalRuleLabels,
     ImageParams,
     Dynamic,
-    Tiled,
-    WebTiled,
-    ProjectParams,
-    esriConfig,
     esriRest,
-    folderTemplate,
-    sublayerTemplate,
-    overlayTemplate
+    layerControlTemplate,
+    dynamicFolderControlTemplate,
+    dynamicSublayerControlTemplate
 ) {
-    //folder class
-    var Folder = declare([WidgetBase, TemplatedMixin], {
-        templateString: folderTemplate,
+    //folder (layer group) control widget
+    var FolderControl = declare([WidgetBase, TemplatedMixin], {
+        templateString: dynamicFolderControlTemplate,
+        controller: null, //dynamic layer control
+        folderInfo: null, //esri rest layer info for folder (layer group)
         constructor: function(options) {
+            options = options || {};
             lang.mixin(this, options);
         },
         postCreate: function() {
             this.inherited(arguments);
+            //create the checkbox and init control
             this.checkbox = new CheckBox({
-                checked: this.info.defaultVisibility,
+                checked: this.folderInfo.defaultVisibility,
                 onChange: lang.hitch(this, function() {
-                    this.control.setVisibleLayers();
+                    this.controller.setVisibleLayers();
                     this._checkboxScaleRange();
                 })
             }, this.checkboxNode);
-            this.labelNode.innerHTML = this.info.name;
+            this.labelNode.innerHTML = this.folderInfo.name;
             on(this.expandClickNode, 'click', lang.hitch(this, function() {
-                var subNode = this.sublayerNode;
-                var expNode = this.expandNode;
-                if (domStyle.get(subNode, 'display') === 'none') {
-                    domClass.remove(subNode, 'hardcider-layer-none');
-                    domClass.remove(expNode, 'fa-folder-o');
-                    domClass.add(expNode, 'fa-folder-open-o');
+                var expandNode = this.expandNode,
+                    iconNode = this.expandIconNode;
+                if (domStyle.get(expandNode, 'display') === 'none') {
+                    domClass.remove(expandNode, 'hardcider-display-none');
+                    domClass.remove(iconNode, 'fa-folder-o');
+                    domClass.add(iconNode, 'fa-folder-open-o');
                 } else {
-                    domClass.add(subNode, 'hardcider-layer-none');
-                    domClass.remove(expNode, 'fa-folder-open-o');
-                    domClass.add(expNode, 'fa-folder-o');
+                    domClass.add(expandNode, 'hardcider-display-none');
+                    domClass.remove(iconNode, 'fa-folder-open-o');
+                    domClass.add(iconNode, 'fa-folder-o');
                 }
             }));
-            if (this.info.minScale !== 0 || this.info.maxScale !== 0) {
+            if (this.folderInfo.minScale !== 0 || this.folderInfo.maxScale !== 0) {
                 this._checkboxScaleRange();
-                on(this.control.map, 'zoom-end', lang.hitch(this, this._checkboxScaleRange));
+                this.controller.controlContainer.map.on('zoom-end', lang.hitch(this, this._checkboxScaleRange));
             }
-            domAttr.set(this.checkbox.focusNode, 'data-layer-id', this.info.id);
-            domClass.add(this.checkbox.focusNode, this.control.layer.id + '-layer-checkbox');
+            domAttr.set(this.checkbox.focusNode, 'data-layer-id', this.folderInfo.id);
+            domClass.add(this.checkbox.focusNode, this.controller.layer.id + '-layer-checkbox');
         },
+        //check scales and add/remove disabled classes from checkbox
         _checkboxScaleRange: function() {
             var node = this.checkbox.domNode,
                 checked = this.checkbox.checked,
-                scale = this.control.map.getScale(),
-                min = this.info.minScale,
-                max = this.info.maxScale,
+                scale = this.controller.controlContainer.map.getScale(),
+                min = this.folderInfo.minScale,
+                max = this.folderInfo.maxScale,
                 x = 'dijitCheckBoxDisabled',
                 y = 'dijitCheckBoxCheckedDisabled';
             domClass.remove(node, [x, y]);
@@ -132,49 +125,55 @@ define([
             }
         }
     });
-    //sublayer class
-    var Sublayer = declare([WidgetBase, TemplatedMixin], {
-        templateString: sublayerTemplate,
+
+    //sublayer control widget
+    var SublayerControl = declare([WidgetBase, TemplatedMixin], {
+        templateString: dynamicSublayerControlTemplate,
+        controller: null, //dynamic layer control
+        sublayerInfo: null, //esri rest layer info for sublayer
         constructor: function(options) {
+            options = options || {};
             lang.mixin(this, options);
         },
         postCreate: function() {
             this.inherited(arguments);
+            //create the checkbox and init control
             this.checkbox = new CheckBox({
-                checked: this.info.defaultVisibility,
+                checked: this.sublayerInfo.defaultVisibility,
                 onChange: lang.hitch(this, function() {
-                    this.control.setVisibleLayers();
+                    this.controller.setVisibleLayers();
                     this._checkboxScaleRange();
                 })
             }, this.checkboxNode);
-            this.labelNode.innerHTML = this.info.name;
+            this.labelNode.innerHTML = this.sublayerInfo.name;
             on(this.expandClickNode, 'click', lang.hitch(this, function() {
-                var subNode = this.sublayerNode;
-                var expNode = this.expandNode;
-                if (domStyle.get(subNode, 'display') === 'none') {
-                    domClass.remove(subNode, 'hardcider-layer-none');
-                    domClass.remove(expNode, 'fa-plus-square-o');
-                    domClass.add(expNode, 'fa-minus-square-o');
+                var expandNode = this.expandNode,
+                    iconNode = this.expandIconNode;
+                if (domStyle.get(expandNode, 'display') === 'none') {
+                    domClass.remove(expandNode, 'hardcider-display-none');
+                    domClass.remove(iconNode, 'fa-plus-square-o');
+                    domClass.add(iconNode, 'fa-minus-square-o');
                 } else {
-                    domClass.add(subNode, 'hardcider-layer-none');
-                    domClass.remove(expNode, 'fa-minus-square-o');
-                    domClass.add(expNode, 'fa-plus-square-o');
+                    domClass.add(expandNode, 'hardcider-display-none');
+                    domClass.remove(iconNode, 'fa-minus-square-o');
+                    domClass.add(iconNode, 'fa-plus-square-o');
                 }
             }));
-            if (this.info.minScale !== 0 || this.info.maxScale !== 0) {
+            if (this.sublayerInfo.minScale !== 0 || this.sublayerInfo.maxScale !== 0) {
                 this._checkboxScaleRange();
-                on(this.control.map, 'zoom-end', lang.hitch(this, this._checkboxScaleRange));
+                this.controller.controlContainer.map.on('zoom-end', lang.hitch(this, this._checkboxScaleRange));
             }
-            domAttr.set(this.checkbox.focusNode, 'data-layer-id', this.info.id);
-            domClass.add(this.checkbox.focusNode, this.control.layer.id + '-layer-checkbox');
+            domAttr.set(this.checkbox.focusNode, 'data-layer-id', this.sublayerInfo.id);
+            domClass.add(this.checkbox.focusNode, this.controller.layer.id + '-layer-checkbox');
             this._createLayerMenu();
         },
+        //check scales and add/remove disabled classes from checkbox
         _checkboxScaleRange: function() {
             var node = this.checkbox.domNode,
                 checked = this.checkbox.checked,
-                scale = this.control.map.getScale(),
-                min = this.info.minScale,
-                max = this.info.maxScale,
+                scale = this.controller.controlContainer.map.getScale(),
+                min = this.sublayerInfo.minScale,
+                max = this.sublayerInfo.maxScale,
                 x = 'dijitCheckBoxDisabled',
                 y = 'dijitCheckBoxCheckedDisabled';
             domClass.remove(node, [x, y]);
@@ -194,30 +193,31 @@ define([
             }
         },
         _createLayerMenu: function() {
-            var li = this.control.layerInfo;
             this.menu = new Menu({
                 contextMenuForWindow: false,
                 targetNodeIds: [this.labelNode],
                 leftClickToOpen: true
             });
+            var li = this.controller.layerInfo,
+                controlContainer = this.controller.controlContainer;
             if (li.identify) {
                 var idMenu = new Menu();
                 idMenu.addChild(new MenuItem({
                     label: 'Point',
                     onClick: lang.hitch(this, function() {
-                        this.control.container.identify(this.control.layer, 'point', this.info.id);
+                        controlContainer.identify(this.controller.layer, 'point', this.sublayerInfo.id);
                     })
                 }));
                 idMenu.addChild(new MenuItem({
                     label: 'Extent',
                     onClick: lang.hitch(this, function() {
-                        this.control.container.identify(this.control.layer, 'extent', this.info.id);
+                        controlContainer.identify(this.controller.layer, 'extent', this.sublayerInfo.id);
                     })
                 }));
                 idMenu.addChild(new MenuItem({
                     label: 'Polygon',
                     onClick: lang.hitch(this, function() {
-                        this.control.container.identify(this.control.layer, 'polygon', this.info.id);
+                        controlContainer.identify(this.controller.layer, 'polygon', this.sublayerInfo.id);
                     })
                 }));
                 idMenu.startup();
@@ -230,45 +230,45 @@ define([
                 this.menu.addChild(new MenuItem({
                     label: 'Query',
                     onClick: lang.hitch(this, function() {
-                        this.control.container.query(this.control.layer, this.info.id);
+                        controlContainer.query(this.controller.layer, this.sublayerInfo.id);
                     })
                 }));
                 this.menu.addChild(new MenuItem({
                     label: 'Query Builder',
                     onClick: lang.hitch(this, function() {
-                        this.control.container.queryBuilder(this.control.layer, this.info.id);
+                        controlContainer.queryBuilder(this.controller.layer, this.sublayerInfo.id);
                     })
                 }));
             }
             this.menu.startup();
         }
     });
-    //the layer control
-    return declare([WidgetBase, TemplatedMixin, Contained, Evented], {
-        templateString: overlayTemplate,
-        map: null,
-        container: null,
+
+
+    //dynamic layer control
+    return declare([WidgetBase, TemplatedMixin, Contained], {
+        templateString: layerControlTemplate,
+        controlContainer: null,
         layerInfo: null,
         constructor: function(options) {
+            options = options || {};
             lang.mixin(this, options);
         },
         postCreate: function() {
             this.inherited(arguments);
-            switch (this.layerInfo.type) {
-                case 'dynamic':
-                    this._addDynamic(this.layerInfo);
-                    break;
-                case 'tiled':
-                    this._addTiled(this.layerInfo);
-                    break;
-                case 'webTiled':
-                    this._addWebTiled(this.layerInfo);
-                    break;
-                default:
-                    this.destroy();
-                    break;
+            if (!this.layerInfo) {
+                console.log('DynamicLayerControl error::layerInfo option is required');
+                this.destroy();
+                return;
             }
+            if (!this.controlContainer) {
+                console.log('DynamicLayerControl error::controlContainer option is required');
+                this.destroy();
+                return;
+            }
+            this._addLayer(this.layerInfo, this.controlContainer.map);
         },
+
         toggleLayer: function() {
             var l = this.layer;
             if (l.visible) {
@@ -280,24 +280,8 @@ define([
                 this._checkboxScaleRange();
             }
         },
-        zoomLayerExtent: function() {
-            if (this.layer.spatialReference === this.map.spatialReference) {
-                this.map.setExtent(this.layer.fullExtent, true);
-            } else {
-                var params = new ProjectParams();
-                params.geometries = [this.layer.fullExtent];
-                params.outSR = this.map.spatialReference;
-                if (esriConfig.defaults.geometryService) {
-                    esriConfig.defaults.geometryService.project(params, lang.hitch(this, function(r) {
-                        this.map.setExtent(r[0], true);
-                    }), function(e) {
-                        console.log(e);
-                    });
-                } else {
-                    console.log('zoomLayerExtent::esriConfig.defaults.geometryService is not set');
-                }
-            }
-        },
+        //set dynamic layer visible layers
+        //perhaps should be private
         setVisibleLayers: function() {
             var setLayers = [];
             array.forEach(query('.' + this.layer.id + '-layer-checkbox'), function(i) {
@@ -324,8 +308,8 @@ define([
                 this.layer.refresh();
             }
         },
-        //add ags dynamic layer
-        _addDynamic: function(layerInfo) {
+        //add ags dynamic layer and init control
+        _addLayer: function(layerInfo, map) {
             var li = lang.mixin({
                 secured: false,
                 token: null,
@@ -338,9 +322,10 @@ define([
                 query: true
             }, layerInfo);
             this.layerInfo = li;
-            var ip = new ImageParams();
-            ip.format = li.imageFormat;
-            ip.dpi = li.dpi;
+            var ip = lang.mixin(new ImageParams(), {
+                format: li.imageFormat,
+                dpi: li.dpi
+            });
             this.layer = new Dynamic((li.secured) ? li.url + '?token=' + li.token : li.url, {
                 id: li.id,
                 imageParameters: ip,
@@ -351,57 +336,55 @@ define([
             if (li.secured) {
                 this.layer.url = li.url;
             }
-            this.map.addLayer(this.layer);
+            map.addLayer(this.layer);
             this.checkbox = new CheckBox({
                 checked: li.visible,
                 onChange: lang.hitch(this, this.toggleLayer)
             }, this.checkboxNode);
             this.labelNode.innerHTML = li.name;
             this.layer.on('update-start', lang.hitch(this, function() {
-                domClass.remove(this.layerUpdateNode, 'hardcider-layer-none');
+                domClass.remove(this.layerUpdateNode, 'hardcider-display-none');
             }));
             this.layer.on('update-end', lang.hitch(this, function() {
-                domClass.add(this.layerUpdateNode, 'hardcider-layer-none');
+                domClass.add(this.layerUpdateNode, 'hardcider-display-none');
             }));
             on(this.layer, 'load', lang.hitch(this, function() {
-                this.emit('control-loaded', this);
                 if (this.layer.minScale !== 0 || this.layer.maxScale !== 0) {
                     this._checkboxScaleRange();
-                    on(this.map, 'zoom-end', lang.hitch(this, this._checkboxScaleRange));
+                    map.on('zoom-end', lang.hitch(this, this._checkboxScaleRange));
                 }
             }));
             on(this.layer, 'scale-range-change', lang.hitch(this, function() {
                 if (this.layer.minScale !== 0 || this.layer.maxScale !== 0) {
                     this._checkboxScaleRange();
-                    on(this.map, 'zoom-end', lang.hitch(this, this._checkboxScaleRange));
+                    map.on('zoom-end', lang.hitch(this, this._checkboxScaleRange));
                 } else {
                     this._checkboxScaleRange();
                 }
             }));
             if (li.sublayers) {
                 on(this.expandClickNode, 'click', lang.hitch(this, function() {
-                    var subNode = this.sublayerNode;
-                    var expNode = this.expandNode;
-                    if (domStyle.get(subNode, 'display') === 'none') {
-                        domClass.remove(subNode, 'hardcider-layer-none');
-                        domClass.remove(expNode, 'fa-plus-square-o');
-                        domClass.add(expNode, 'fa-minus-square-o');
+                    var expandNode = this.expandNode,
+                        iconNode = this.expandIconNode;
+                    if (domStyle.get(expandNode, 'display') === 'none') {
+                        domClass.remove(expandNode, 'hardcider-display-none');
+                        domClass.remove(iconNode, 'fa-plus-square-o');
+                        domClass.add(iconNode, 'fa-minus-square-o');
                     } else {
-                        domClass.add(subNode, 'hardcider-layer-none');
-                        domClass.remove(expNode, 'fa-minus-square-o');
-                        domClass.add(expNode, 'fa-plus-square-o');
+                        domClass.add(expandNode, 'hardcider-display-none');
+                        domClass.remove(iconNode, 'fa-minus-square-o');
+                        domClass.add(iconNode, 'fa-plus-square-o');
                     }
                 }));
                 on(this.layer, 'load', lang.hitch(this, function() {
                     this._addSublayers();
                 }));
             } else {
-                domClass.remove(this.expandNode, ['fa', 'fa-plus-square-o', 'hardcider-layer-icon']);
-                domStyle.set(this.expandNode, 'cursor', 'default');
-                domConst.destroy(this.sublayersNode);
+                domClass.remove(this.expandIconNode, ['fa', 'fa-plus-square-o', 'hardcider-layer-icon']);
+                domStyle.set(this.expandIconNode, 'cursor', 'default');
+                domConst.destroy(this.expandNode);
             }
             this._createLayerMenu();
-            this.container.addChild(this, 'first');
         },
         _addSublayers: function() {
             array.forEach(this.layer.layerInfos, lang.hitch(this, function(info) {
@@ -410,42 +393,43 @@ define([
                     control;
                 if (pid === -1 && slids === null) {
                     //it's a top level sublayer
-                    control = new Sublayer({
+                    control = new SublayerControl({
                         id: this.layer.id + '-' + info.id + '-sublayer-control',
-                        control: this,
-                        info: info
+                        controller: this,
+                        sublayerInfo: info
                     });
-                    domConst.place(control.domNode, this.sublayerNode, 'last');
+                    domConst.place(control.domNode, this.expandNode, 'last');
                 } else if (pid === -1 && slids !== null) {
                     //it's a top level folder
-                    control = new Folder({
+                    control = new FolderControl({
                         id: this.layer.id + '-' + info.id + '-sublayer-control',
-                        control: this,
-                        info: info
+                        controller: this,
+                        folderInfo: info
                     });
-                    domConst.place(control.domNode, this.sublayerNode, 'last');
+                    domConst.place(control.domNode, this.expandNode, 'last');
                 } else if (pid !== -1 && slids !== null) {
                     //it's a nested folder
-                    control = new Folder({
+                    control = new FolderControl({
                         id: this.layer.id + '-' + info.id + '-sublayer-control',
-                        control: this,
-                        info: info
+                        controller: this,
+                        folderInfo: info
                     });
-                    domConst.place(control.domNode, registry.byId(this.layer.id + '-' + info.parentLayerId + '-sublayer-control').sublayerNode, 'last');
+                    domConst.place(control.domNode, registry.byId(this.layer.id + '-' + info.parentLayerId + '-sublayer-control').expandNode, 'last');
                 } else if (pid !== -1 && slids === null) {
                     //it's a nested sublayer
-                    control = new Sublayer({
+                    control = new SublayerControl({
                         id: this.layer.id + '-' + info.id + '-sublayer-control',
-                        control: this,
-                        info: info
+                        controller: this,
+                        sublayerInfo: info
                     });
-                    domConst.place(control.domNode, registry.byId(this.layer.id + '-' + info.parentLayerId + '-sublayer-control').sublayerNode, 'last');
+                    domConst.place(control.domNode, registry.byId(this.layer.id + '-' + info.parentLayerId + '-sublayer-control').expandNode, 'last');
                 }
             }));
             if (this.layer.version >= 10.01) {
                 esriRest.getLegend(this.layer).then(lang.hitch(this, this._createLegends));
             }
         },
+        //create legends for each sublayer and place in sublayer control's expand node
         _createLegends: function(r) {
             array.forEach(r.layers, function(layer) {
                 var legendContent = '<table class="' + this.layer.id + '-' + layer.layerId + '-legend hardcider-layer-legend">';
@@ -454,107 +438,17 @@ define([
                     legendContent += '<tr><td><img class="' + this.layer.id + '-legend-image hardcider-layer-legend-image" style="width:' + legend.width + ';height:' + legend.height + ';" src="data:' + legend.contentType + ';base64,' + legend.imageData + '" alt="' + label + '" /></td><td class="hardcider-layer-legend-label">' + label + '</td></tr>';
                 }, this);
                 legendContent += '</table>';
-                registry.byId(this.layer.id + '-' + layer.layerId + '-sublayer-control').sublayerNode.innerHTML = legendContent;
+                registry.byId(this.layer.id + '-' + layer.layerId + '-sublayer-control').expandNode.innerHTML = legendContent;
             }, this);
             array.forEach(query('.' + this.layer.id + '-legend-image'), function(img) {
                 domStyle.set(img, 'opacity', this.layer.opacity);
             }, this);
         },
-        //add ags tiled layer
-        _addTiled: function(layerInfo) {
-            var li = lang.mixin({
-                secured: false,
-                token: null,
-                visible: false,
-                opacity: 1,
-                resampling: true
-            }, layerInfo);
-            this.layerInfo = li;
-            this.layer = new Tiled((li.secured) ? li.url + '?token=' + li.token : li.url, {
-                id: li.id,
-                visible: li.visible,
-                opacity: li.opacity,
-                resampling: li.resampling
-            });
-            this.layer.layerParams = li;
-            if (li.secured) {
-                this.layer.url = li.url;
-            }
-            this.map.addLayer(this.layer);
-            this.checkbox = new CheckBox({
-                checked: li.visible,
-                onChange: lang.hitch(this, this.toggleLayer)
-            }, this.checkboxNode);
-            this.labelNode.innerHTML = li.name;
-            this.layer.on('update-start', lang.hitch(this, function() {
-                domClass.remove(this.layerUpdateNode, 'hardcider-layer-none');
-            }));
-            this.layer.on('update-end', lang.hitch(this, function() {
-                domClass.add(this.layerUpdateNode, 'hardcider-layer-none');
-            }));
-            on(this.layer, 'load', lang.hitch(this, function() {
-                this.emit('control-loaded', this);
-                if (this.layer.minScale !== 0 || this.layer.maxScale !== 0) {
-                    this._checkboxScaleRange();
-                    on(this.map, 'zoom-end', lang.hitch(this, this._checkboxScaleRange));
-                }
-            }));
-            on(this.layer, 'scale-range-change', lang.hitch(this, function() {
-                if (this.layer.minScale !== 0 || this.layer.maxScale !== 0) {
-                    this._checkboxScaleRange();
-                    on(this.map, 'zoom-end', lang.hitch(this, this._checkboxScaleRange));
-                } else {
-                    this._checkboxScaleRange();
-                }
-            }));
-            this._createLayerMenu();
-            domClass.remove(this.expandNode, ['fa', 'fa-plus-square-o', 'hardcider-layer-icon']);
-            domStyle.set(this.expandNode.parentNode, 'cursor', 'default');
-            domConst.destroy(this.sublayersNode);
-            this.container.addChild(this, 'first');
-        },
-        //add web tiled layer
-        _addWebTiled: function(layerInfo) {
-            var li = lang.mixin({
-                visible: false,
-                opacity: 1,
-                subDomains: [],
-                copyright: '',
-                resampling: true
-            }, layerInfo);
-            this.layerInfo = li;
-            this.layer = new WebTiled(li.template, {
-                id: li.id,
-                visible: li.visible,
-                opacity: li.opacity,
-                subDomains: li.subDomains,
-                copyright: li.copyright,
-                resampling: li.resampling
-            });
-            this.layer.layerParams = li;
-            this.map.addLayer(this.layer);
-            this.checkbox = new CheckBox({
-                checked: li.visible,
-                onChange: lang.hitch(this, this.toggleLayer)
-            }, this.checkboxNode);
-            this.labelNode.innerHTML = li.name;
-            this.layer.on('update-start', lang.hitch(this, function() {
-                domClass.remove(this.layerUpdateNode, 'hardcider-layer-none');
-            }));
-            this.layer.on('update-end', lang.hitch(this, function() {
-                domClass.add(this.layerUpdateNode, 'hardcider-layer-none');
-            }));
-            this._createLayerMenu();
-            domClass.remove(this.expandNode, ['fa', 'fa-plus-square-o', 'hardcider-layer-icon']);
-            domStyle.set(this.expandNode.parentNode, 'cursor', 'default');
-            domConst.destroy(this.sublayersNode);
-            this.container.addChild(this, 'first');
-            this.emit('control-loaded', this);
-        },
+        //check scales and add/remove disabled classes from checkbox
         _checkboxScaleRange: function() {
             var node = this.checkbox.domNode,
                 checked = this.checkbox.checked,
-                scale = this.map.getScale(),
+                scale = this.controlContainer.map.getScale(),
                 min = this.layer.minScale,
                 max = this.layer.maxScale,
                 x = 'dijitCheckBoxDisabled',
@@ -575,40 +469,47 @@ define([
                 }
             }
         },
+        //create the layer control menu
         _createLayerMenu: function() {
-            var li = this.layerInfo;
             this.menu = new Menu({
                 contextMenuForWindow: false,
                 targetNodeIds: [this.labelNode],
                 leftClickToOpen: true
             });
-            if (li.identify) {
+            var menu = this.menu,
+                li = this.layerInfo,
+                layer = this.layer,
+                controlContainer = this.controlContainer;
+            //not sure about this any more
+            /*if (li.identify) {
                 this.menu.addChild(new MenuItem({
                     label: 'Identify ' + li.name,
                     onClick: lang.hitch(this, function() {
-                        this.container.identify(this.layer);
+                        controlContainer.identify(this.layer);
                     })
                 }));
                 this.menu.addChild(new MenuSeparator());
-            }
-            if (this.container.reorder) {
-                this.menu.addChild(new MenuItem({
+            }*/
+            if (this.controlContainer.reorder) {
+                menu.addChild(new MenuItem({
                     label: 'Move Layer Up',
                     onClick: lang.hitch(this, function() {
-                        this.container.moveUp(this);
+                        controlContainer.moveUp(this);
                     })
                 }));
-                this.menu.addChild(new MenuItem({
+                menu.addChild(new MenuItem({
                     label: 'Move Layer Down',
                     onClick: lang.hitch(this, function() {
-                        this.container.moveDown(this);
+                        controlContainer.moveDown(this);
                     })
                 }));
-                this.menu.addChild(new MenuSeparator());
+                menu.addChild(new MenuSeparator());
             }
-            this.menu.addChild(new MenuItem({
+            menu.addChild(new MenuItem({
                 label: 'Zoom to Layer Extent',
-                onClick: lang.hitch(this, this.zoomLayerExtent)
+                onClick: lang.hitch(this, function() {
+                    this.controlContainer.zoomToLayerExtent(layer);
+                })
             }));
             this.opacitySlider = new HorizontalSlider({
                 id: li.id + '_opacity_slider',
@@ -618,7 +519,7 @@ define([
                 discreteValues: 11,
                 showButtons: false,
                 onChange: lang.hitch(this, function(value) {
-                    this.layer.setOpacity(value);
+                    layer.setOpacity(value);
                     array.forEach(query('.' + li.id + '-legend-image'), function(img) {
                         domStyle.set(img, 'opacity', value);
                     });
@@ -633,7 +534,7 @@ define([
                 content: this.opacitySlider
             });
             domStyle.set(opacityTooltip.connectorNode, 'display', 'none');
-            this.menu.addChild(new PopupMenuItem({
+            menu.addChild(new PopupMenuItem({
                 label: 'Layer Opacity',
                 popup: opacityTooltip
             }));
@@ -641,31 +542,20 @@ define([
             swipeMenu.addChild(new MenuItem({
                 label: 'Horizontal',
                 onClick: lang.hitch(this, function() {
-                    this.map.swipeLayer(this.layer, 'horizontal');
+                    controlContainer.map.swipeLayer(layer, 'horizontal');
                 })
             }));
             swipeMenu.addChild(new MenuItem({
                 label: 'Vertical',
                 onClick: lang.hitch(this, function() {
-                    this.map.swipeLayer(this.layer, 'vertical');
+                    controlContainer.map.swipeLayer(layer, 'vertical');
                 })
             }));
-            this.menu.addChild(new PopupMenuItem({
+            menu.addChild(new PopupMenuItem({
                 label: 'Layer Swipe',
                 popup: swipeMenu
             }));
-            if (li.info) {
-                this.menu.addChild(new MenuItem({
-                    label: 'Service Info',
-                    onClick: lang.hitch(this, function() {
-                        var d = this.infoDialog;
-                        d.set('title', li.name);
-                        d.setHref(li.info.href);
-                        d.show();
-                    })
-                }));
-            }
-            this.menu.startup();
+            menu.startup();
         }
     });
 });

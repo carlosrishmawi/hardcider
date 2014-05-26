@@ -355,7 +355,7 @@ p {
 }
 /* overlay and feature controls */
 
-.hardcider-layer {} .hardcider-layer-controls {
+.hardcider-layer-controls {
     width: 100%;
 }
 .hardcider-layer-controls tr {
@@ -373,14 +373,14 @@ p {
     text-align: center;
     width: 1.2em;
 }
-.hardcider-layer-label {} .hardcider-layer-update {
+.hardcider-layer-update {
     text-align: center;
     width: 1.2em;
 }
 .hardcider-layer-indent {
     padding-left: 20px;
 }
-.hardcider-layer-icon {} .hardcider-layer-icon-expand {
+.hardcider-layer-expand-icon {
     font-size: 115%;
 }
 .hardcider-layer-legend tr {

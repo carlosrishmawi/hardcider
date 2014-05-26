@@ -65,12 +65,14 @@ define([
             if (!options.url && !options.featureCollection) {
                 console.log('GeoJSONLayer error::you must specify a url or a feature collection');
                 //check this
-                this.getMap().removeLayer(this);
+                //this.getMap().removeLayer(this);
                 return;
             }
             lang.mixin(this, options);
             if (this.url) {
                 this._getGeoJson(this.url);
+            } else if (this.featureCollection) {
+                this._addGeoJson(this.featureCollection);
             }
         },
         _getGeoJson: function(url) {
@@ -78,20 +80,20 @@ define([
                 url: url,
                 callback: 'callback',
                 handleAs: 'json'
-            }).then(lang.hitch(this, this._handleGeoJsonResult), lang.hitch(this, this._handleGeoJsonError));
+            }).then(lang.hitch(this, this._addGeoJson), lang.hitch(this, function(e) {
+                console.log(e);
+            }));
         },
-        _handleGeoJsonResult: function(r) {
-            console.log(r);
+        _addGeoJson: function(r) {
+            r = r || this.featureCollection;
             if (!window.Terraformer || !window.Terraformer.ArcGIS) {
                 console.log('GeoJSONLayer error::Terraformer or Terraformer.ArcGIS are not loaded');
                 return;
             }
             var collection = window.Terraformer.ArcGIS.convert(r);
-            console.log(geomJsonUtils.getJsonType);
             array.forEach(collection, function(feat) {
                 var geom = geomJsonUtils.fromJson(feat.geometry),
                     sym;
-                console.log(geomJsonUtils.getJsonType(geom));
                 switch (geom.type) {
                     case 'point':
                         sym = symJsonUtils.fromJson(this.symbols.point);
@@ -105,9 +107,6 @@ define([
                 }
                 this.add(new Graphic(geom, sym, feat.attributes));
             }, this);
-        },
-        _handleGeoJsonError: function(e) {
-            console.log(e);
         }
     });
 });

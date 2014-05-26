@@ -26,17 +26,23 @@
         </div>
     </div>
     <div id="container"></div>
+    <!-- terraformer -->
     <script src="//cdn-geoweb.s3.amazonaws.com/terraformer/1.0.3/terraformer.min.js"></script>
     <script src="//cdn-geoweb.s3.amazonaws.com/terraformer-arcgis-parser/1.0.3/terraformer-arcgis-parser.min.js"></script>
+    <!-- for creating and saving files on client -->
+    <script src="js/xtras/Blob.js"></script>
+    <script src="js/xtras/FileSaver.js"></script>
+    <!-- PouchDB requires es5-shim -->
+    <script src="js/xtras/es5-shim.min.js"></script>
+    <script src="js/xtras/pouchdb-2.1.0.min.js"></script>
+    <!-- parse .gdb and .shp files on client -->
+    <script src="js/xtras/fgdb.min.js"></script>
     <script>
         dojoConfig = {
             async: true,
             packages: [{
                 name: 'hardcider',
                 location: location.pathname.replace(/[^\/]+$/, '') + 'js/hardcider'
-            }, {
-                name: 'xtras',
-                location: location.pathname.replace(/[^\/]+$/, '') + 'js/xtras'
             }]
         };
     </script>
@@ -45,9 +51,6 @@
         var dregs; //dev only
         require([
             'hardcider/fermenter',
-            //uncomment and remove corresponding script tags for jso build
-            //'//cdn-geoweb.s3.amazonaws.com/terraformer/1.0.3/terraformer.min.js',
-            //'//cdn-geoweb.s3.amazonaws.com/terraformer-arcgis-parser/1.0.3/terraformer-arcgis-parser.min.js',
             'dojo/domReady!'
         ], function (Fermenter) {
             Fermenter.ferment('loading', 'container');

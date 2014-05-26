@@ -7,9 +7,7 @@
 define([
     'dojo/Deferred',
     'dojo/_base/declare',
-    'dojo/_base/lang',
-    'xtras/pouchdb-2_1_0_min',
-    'xtras/es5-shim_min'
+    'dojo/_base/lang'
 ], function(
     Deferred,
     declare,
@@ -21,7 +19,8 @@ define([
         _db: null,
         constructor: function(options) {
             if (!window.PouchDB) {
-                window.PouchDB = pdb;
+                console.log('pouch-db-utils requires PouchDB be loaded');
+                return;
             }
             if (options.dbName) {
                 this.initDB(options.dbName);

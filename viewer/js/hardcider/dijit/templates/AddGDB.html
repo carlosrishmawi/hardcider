@@ -1,0 +1,23 @@
+<div class="hardcider-add-layer">
+    <p>
+        To add Geodatabase feature classes as a GeoJSON layer, upload a zipped (.zip) .gdb folder, or select and upload the files in a .gdb folder.
+    </p>
+    <p class="hardcider-warning-text">
+        Large files may freeze the browser and take a long time to load. Or your browser might crash.
+    </p>
+    <p>
+        <span data-dojo-attach-event="click: _zipUpload" class="hardcider-click">Upload Zip</span>
+        &nbsp;&nbsp;
+        <span data-dojo-attach-event="click: _filesUpload" class="hardcider-click">Upload Files</span>
+    </p>
+    <div data-dojo-attach-point="layersNode" class="hardcider-add-layer-gdb-layers">
+        <div class="hardcider-add-layer-gdb-layer">
+            No layers
+        </div>
+    </div>
+    <p>
+        Click on a layer to add to the map. After adding a layer, the default symbol and information template can be edited by clicking on a layer's content menu in the Features tab.
+    </p>
+    <input data-dojo-attach-point="zipNode" style="display:none;" type='file' multiple></input>
+    <input data-dojo-attach-point="filesNode" style="display:none;" type='file' multiple directory webkitdirectory></input>
+</div>
