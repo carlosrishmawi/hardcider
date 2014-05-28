@@ -244,7 +244,6 @@ define([
         }
     });
 
-
     //dynamic layer control
     return declare([WidgetBase, TemplatedMixin, Contained], {
         templateString: layerControlTemplate,

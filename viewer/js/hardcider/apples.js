@@ -57,6 +57,15 @@ define(['esri/geometry/Extent'], function(Extent) {
             url: 'http://navigator.state.or.us/arcgis/rest/services/BaseMaps/BaseMap_Streets_Cache_WM/MapServer',
             name: 'Oregon Street Map'
         }, {
+            type: 'tiled',
+            id: 'soilsurveymap',
+            url: 'https://server.arcgisonline.com/arcgis/rest/services/Specialty/Soil_Survey_Map/MapServer',
+            name: 'Soil Survey Map',
+            opacity: 0.6,
+            sublayers: true,
+            identify: true,
+            query: true
+        }, {
             type: 'dynamic',
             id: 'oregonhydro',
             url: 'http://navigator.state.or.us/arcgis/rest/services/Framework/Hydro_GeneralMap_WM/MapServer',
@@ -89,6 +98,13 @@ define(['esri/geometry/Extent'], function(Extent) {
             id: 'oregonfirestations',
             url: 'http://navigator.state.or.us/arcgis/rest/services/Framework/Prep_GeneralMap/MapServer/1',
             name: 'Oregon Fire Stations',
+            mode: 1,
+            outFields: ['*']
+        }, {
+            type: 'feature',
+            id: 'oregonnursinghomes',
+            url: 'http://navigator.state.or.us/arcgis/rest/services/Framework/Prep_GeneralMap/MapServer/5',
+            name: 'Oregon Nursing Homes',
             mode: 1,
             outFields: ['*']
         }]
