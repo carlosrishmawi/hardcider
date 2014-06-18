@@ -1,14 +1,5 @@
 module.exports = function (grunt) {
     grunt.initConfig({
-        pkg: grunt.file.readJSON('package.json'),
-        tag: {
-            banner: '/* <%= pkg.name %>\n' +
-                ' * @version <%= pkg.version %>\n' +
-                ' * @author <%= pkg.author %>\n' +
-                ' * Project: <%= pkg.homepage %>\n' +
-                ' * Copyright <%= pkg.year %>. <%= pkg.license %> licensed.\n' +
-                ' */\n'
-        },
         jsbeautifier: {
             files: ['viewer/js/hardcider/**/*.js', 'viewer/js/hardcider/hardcider.css']
         },
@@ -26,12 +17,21 @@ module.exports = function (grunt) {
                 files: ['viewer/js/hardcider/**'],
                 tasks: ['jshint']
             }
+        },
+        esri_slurp: {
+            options: {
+                version: '3.9',
+                packageLocation: 'build/js/esri'
+            }
         }
     });
 
     grunt.loadNpmTasks('grunt-contrib-jshint');
     grunt.loadNpmTasks('grunt-jsbeautifier');
     grunt.loadNpmTasks('grunt-contrib-watch');
+    grunt.loadNpmTasks('grunt-esri-slurp');
 
-    grunt.registerTask('default', ['jsbeautifier', 'jshint']);
+    grunt.registerTask('default', ['jshint']);
+    grunt.registerTask('beautify', ['jsbeautifier']);
+    grunt.registerTask('slurp', ['esri_slurp']);
 };

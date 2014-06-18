@@ -8,9 +8,9 @@ define([
     'dojo/_base/fx',
     'dojo/dom-construct',
     'dojo/dom-style',
-    'hardcider/apples',
-    'hardcider/ciderpress',
-    'hardcider/pintglass',
+    'hardcider/settings',
+    'hardcider/Layout',
+    'hardcider/Map',
     'hardcider/iquert/IQueRT',
     'hardcider/draw/Draw',
     'hardcider/draw/DrawProjects',
@@ -30,9 +30,9 @@ define([
     baseFx,
     domConst,
     domStyle,
-    apples,
-    CiderPress,
-    PintGlass,
+    settings,
+    Layout,
+    Map,
     IQueRT,
     Draw,
     DrawProjects,
@@ -47,18 +47,19 @@ define([
     Extent,
     Geocoder
 ) {
+    'use strict';
     return {
-        ferment: function(loadingNode, applicationNode) {
+        build: function(loadingNode, applicationNode) {
             if (!loadingNode || !applicationNode) {
                 console.log('fermenter error::loadingNode and applicationNode are required');
                 return;
             }
             //build layout
-            this.layout = new CiderPress(applicationNode);
+            this.layout = new Layout(applicationNode);
             this.layout.press();
 
             //the map
-            this.map = new PintGlass('map-panel', apples.map);
+            this.map = new Map('map-panel', settings.map);
 
             //let's do the rest after map loads
             //so many classes require a loaded map
@@ -89,9 +90,9 @@ define([
                 var draw = this.draw;
                 this.drawProjects = new DrawProjects({
                     draw: this.draw,
-                    pouchDbName: apples.drawProjects.pouchDbName,
-                    couchDbUrl: apples.drawProjects.couchDbUrl,
-                    couchDbGetProjectsUrl: apples.drawProjects.couchDbGetProjectsUrl
+                    pouchDbName: settings.drawProjects.pouchDbName,
+                    couchDbUrl: settings.drawProjects.couchDbUrl,
+                    couchDbGetProjectsUrl: settings.drawProjects.couchDbGetProjectsUrl
                 });
 
                 //iquert
@@ -129,12 +130,12 @@ define([
                 //this.featureContainer.iquert = this.iquert;
 
                 //load overlay layers
-                array.forEach(apples.overlays, function(overlay) {
+                array.forEach(settings.overlays, function(overlay) {
                     this.overlayControlContainer.addLayer(overlay);
                 }, this);
 
                 //load vector layers
-                array.forEach(apples.features, function(feature) {
+                array.forEach(settings.features, function(feature) {
                     this.vectorControlContainer.addLayer(feature);
                 }, this);
 
@@ -176,10 +177,10 @@ define([
                     iconClass: 'iconZoomExtent',
                     toolbarGroup: 'map',
                     onClick: function() {
-                        if (apples.map.center && apples.map.zoom) {
-                            map.centerAndZoom(apples.map.center, apples.map.zoom);
-                        } else if (apples.map.extent) {
-                            map.setExtent(apples.map.extent, true);
+                        if (settings.map.center && settings.map.zoom) {
+                            map.centerAndZoom(settings.map.center, settings.map.zoom);
+                        } else if (settings.map.extent) {
+                            map.setExtent(settings.map.extent, true);
                         }
                     }
                 }));

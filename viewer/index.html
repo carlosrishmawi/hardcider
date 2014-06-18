@@ -48,13 +48,13 @@
     </script>
     <script src="//js.arcgis.com/3.9/"></script>
     <script>
-        var dregs; //dev only
+        var app; //dev only
         require([
-            'hardcider/fermenter',
+            'hardcider/Controller',
             'dojo/domReady!'
-        ], function (Fermenter) {
-            Fermenter.ferment('loading', 'container');
-            dregs = Fermenter;
+        ], function (Controller) {
+            Controller.build('loading', 'container');
+            app = Controller;
         });
     </script>
 </body>
