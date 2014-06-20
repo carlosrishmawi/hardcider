@@ -17,6 +17,7 @@ define([
     'hardcider/dijit/OverlayControlContainer',
     'hardcider/dijit/VectorControlContainer',
     'hardcider/dijit/Measure',
+    'hardcider/dijit/Print',
     'dijit/form/Button',
     'dijit/form/DropDownButton',
     'dijit/ToolbarSeparator',
@@ -39,6 +40,7 @@ define([
     OverlayControlContainer,
     VectorControlContainer,
     Measure,
+    Print,
     Button,
     DropDownButton,
     ToolbarSeparator,
@@ -56,7 +58,7 @@ define([
             }
             //build layout
             this.layout = new Layout(applicationNode);
-            this.layout.press();
+            this.layout.build();
 
             //the map
             this.map = new Map('map-panel', settings.map);
@@ -156,8 +158,16 @@ define([
                 }, 'measure');
                 measure.startup();
 
+                //print
+                var print = new Print({
+                    map: map,
+                    printUrl: settings.print.url,
+                    templates: settings.print.templates
+                }, 'print');
+                print.startup();
+
                 //build toolbar
-                var tb = this.layout.toolbar;
+                var tb = layout.toolbar;
                 //map toolbar
                 tb.addItem(new DropDownButton({
                     toolbarGroup: 'map',
@@ -229,9 +239,10 @@ define([
                     showLabel: false,
                     iconClass: 'iconPrint',
                     title: 'Print a PDF of the map',
-                    onClick: function() {
-                        map.alert('Sorry no print...<br>I\'ve always used custom print tasks. Not sure if I should add a generic print task here or not.');
-                    }
+                    onClick: lang.hitch(this, function() {
+                        layout.left.selectChild(layout.toolsTab.id);
+                        layout.toolsTab.selectChild('print-tab');
+                    })
                 }));
                 tb.addItem(new Button({
                     toolbarGroup: 'map',

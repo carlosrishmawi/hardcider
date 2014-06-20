@@ -26,6 +26,13 @@ define(['esri/geometry/Extent'], function(Extent) {
             mapboxMapId: 'btfou.i2j794p6', //please use your mapbox map - thanks
             defaultBasemap: 'bm_mapbox'
         },
+        print: {
+            url: 'http://www.example.com/arcgis/rest/services/My_Print_Task/GPServer/Export%20Web%20Map', //not real
+            templates: {
+                'Letter Landscape': 'Letter ANSI A Landscape',
+                'Letter Portrait': 'Letter ANSI A Portrait'
+            }
+        },
         drawProjects: {
             pouchDbName: 'hardcider-drawing-projects', //changing this is going to leave folks without their projects! set it and forget it!
             couchDbUrl: 'http://localhost:5984/hardcider-drawing-projects',

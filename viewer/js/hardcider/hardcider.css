@@ -524,6 +524,11 @@ p {
 .hardcider-draw-load-grid .dgrid-row {
     cursor: pointer;
 }
+/* print */
+
+.hardcider-print {
+    max-width: 400px;
+}
 /* add layers */
 
 .hardcider-add-layer {

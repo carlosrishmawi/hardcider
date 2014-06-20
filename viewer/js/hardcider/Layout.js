@@ -41,7 +41,7 @@ define([
         constructor: function(node) {
             this.node = node;
         },
-        press: function() {
+        build: function() {
             this.bc = new BC({
                 liveSplitters: true,
                 design: 'sidebar',
@@ -123,6 +123,8 @@ define([
                 content: '<div id="iquert-query-builder"></div>'
             }));
             this.left.addChild(this.iquertTab);
+
+            /*
             this.editorTab = new TC({
                 title: 'Editor',
                 nested: true
@@ -140,6 +142,8 @@ define([
                 content: '<div id="editor-attachements"></div>'
             }));
             this.left.addChild(this.editorTab);
+            */
+
             this.toolsTab = new TC({
                 title: 'Tools',
                 nested: true
@@ -147,6 +151,11 @@ define([
             this.toolsTab.addChild(new CP({
                 title: 'Measure',
                 content: '<div id="measure"></div>'
+            }));
+            this.toolsTab.addChild(new CP({
+                id: 'print-tab',
+                title: 'Print',
+                content: '<div id="print"></div>'
             }));
             this.left.addChild(this.toolsTab);
             this.right = new TC({
@@ -169,7 +178,7 @@ define([
             this.bc.addChild(this.bottom);
 
             //bottom placeholder
-            this.bottom.addChild(new CP({
+            /*this.bottom.addChild(new CP({
                 title: 'Hello',
                 content: 'I\'m just a placeholder. My parent is a good place for custom tasks and such.'
             }));
@@ -177,7 +186,7 @@ define([
                 title: 'World',
                 closable: true,
                 content: 'I\'m just a placeholder. My parent is a good place for custom tasks and such. And I\'m closable.'
-            }));
+            }));*/
             //..bottom placeholder
 
             this.center = new CP({
