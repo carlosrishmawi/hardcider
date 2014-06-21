@@ -5,6 +5,8 @@ A viewer built with the [ESRI JavaScript API](https://developers.arcgis.com/java
 
 ####[View Demo](http://btfou.github.io/hardcider/)
 
+Demo currently running: https://github.com/btfou/hardcider/releases/tag/v0.3.0
+
 ####Getting Started
 
 Simply fork or download this repo.
@@ -22,31 +24,11 @@ Questions, comments and issues are welcome [here](https://github.com/btfou/hardc
 * Hard Cider uses Dojo's claro theme with a few css tweaks to improve/simplify the look and maximize screen real estate for the map. Its beauty is derived from its simplicity and functionality.
 * I am not very good about commenting. I'm working on it.
 
-####The State of Hard Cider
-
-Hard Cider is still a work in progress. There are a handful of key features, which are currently in development. These features include:
-
-* Saving and loading of maps locally and to a server.
-* Add more types of layers to the map via config and UI.
-* ArcGIS feature layer editing.
-* A Grunt build.
-* And more in conceptual mode.
-
 ####Built With Cool Stuff
 
 Do yourself a favor and check out these awesome projects. They make me look good, and they will do the same for you.
 
-* [ESRI JavaScript API](https://developers.arcgis.com/javascript/)
-* [Dojo](http://dojotoolkit.org/)
-* [dgrid](http://dojofoundation.org/packages/dgrid/)
-* [Font Awesome](http://fortawesome.github.io/Font-Awesome/)
-* [Pouch DB](http://pouchdb.com/)
-* [Couch DB](http://couchdb.apache.org/)
-* [es5-shim](https://github.com/es-shims/es5-shim)
-* [Terraformer](http://terraformer.io/)
-* [Blob.js](https://github.com/eligrey/Blob.js)
-* [FileSaver.js](https://github.com/eligrey/FileSaver.js)
-* [Grunt](http://gruntjs.com/)
+[ESRI JavaScript API](https://developers.arcgis.com/javascript/) [Dojo](http://dojotoolkit.org/) [dgrid](http://dojofoundation.org/packages/dgrid/) [Font Awesome](http://fortawesome.github.io/Font-Awesome/) [Pouch DB](http://pouchdb.com/) [Couch DB](http://couchdb.apache.org/) [es5-shim](https://github.com/es-shims/es5-shim) [Terraformer](http://terraformer.io/) [Blob.js](https://github.com/eligrey/Blob.js) [FileSaver.js](https://github.com/eligrey/FileSaver.js) [Grunt](http://gruntjs.com/)
 
 ####License
 The MIT License (MIT)
