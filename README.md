@@ -5,7 +5,7 @@ A viewer built with the [ESRI JavaScript API](https://developers.arcgis.com/java
 
 ####[View Demo](http://btfou.github.io/hardcider/)
 
-Demo currently running: https://github.com/btfou/hardcider/releases/tag/v0.3.0
+Demo currently running: https://github.com/btfou/hardcider/releases/tag/v0.3.1
 
 ####Getting Started
 
