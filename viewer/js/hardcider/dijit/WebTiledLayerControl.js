@@ -86,28 +86,26 @@ define([
             }, layerInfo);
             this.layerInfo = li;
             this.layer = new WebTiled(li.template, {
-                id: li.id,
+                id: li.id || null,
                 visible: li.visible,
                 opacity: li.opacity,
                 subDomains: li.subDomains,
                 copyright: li.copyright,
                 resampling: li.resampling
             });
-            this.layer.layerParams = li;
-            if (li.secured) {
-                this.layer.url = li.url;
-            }
             map.addLayer(this.layer);
+            li.id = this.layer.id;
+            this.layer.layerParams = li;
             this.checkbox = new CheckBox({
                 checked: li.visible,
                 onChange: lang.hitch(this, this.toggleLayer)
             }, this.checkboxNode);
             this.labelNode.innerHTML = li.name;
             this.layer.on('update-start', lang.hitch(this, function() {
-                domClass.remove(this.layerUpdateNode, 'hardcider-layer-none');
+                domClass.remove(this.layerUpdateNode, 'hardcider-display-none');
             }));
             this.layer.on('update-end', lang.hitch(this, function() {
-                domClass.add(this.layerUpdateNode, 'hardcider-layer-none');
+                domClass.add(this.layerUpdateNode, 'hardcider-display-none');
             }));
             this.layer.on('load', lang.hitch(this, function() {
                 if (this.layer.minScale !== 0 || this.layer.maxScale !== 0) {

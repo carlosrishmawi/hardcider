@@ -18,6 +18,8 @@ define([
     'hardcider/dijit/VectorControlContainer',
     'hardcider/dijit/Measure',
     'hardcider/dijit/Print',
+    'hardcider/dijit/AddArcGISService',
+    'hardcider/dijit/AddWebTiledService',
     'dijit/form/Button',
     'dijit/form/DropDownButton',
     'dijit/ToolbarSeparator',
@@ -41,6 +43,8 @@ define([
     VectorControlContainer,
     Measure,
     Print,
+    AddArcGISService,
+    AddWebTiledService,
     Button,
     DropDownButton,
     ToolbarSeparator,
@@ -53,7 +57,7 @@ define([
     return {
         build: function(loadingNode, applicationNode) {
             if (!loadingNode || !applicationNode) {
-                console.log('fermenter error::loadingNode and applicationNode are required');
+                console.log('Controller error::loadingNode and applicationNode are required');
                 return;
             }
             //build layout
@@ -97,7 +101,7 @@ define([
                     couchDbGetProjectsUrl: settings.drawProjects.couchDbGetProjectsUrl
                 });
 
-                //iquert
+                //iquert - Identify Query Results Tables
                 this.vectorControlContainer.addLayer({
                     type: 'application',
                     id: 'gl_iquert_results',
@@ -239,10 +243,10 @@ define([
                     showLabel: false,
                     iconClass: 'iconPrint',
                     title: 'Print a PDF of the map',
-                    onClick: lang.hitch(this, function() {
+                    onClick: function() {
                         layout.left.selectChild(layout.toolsTab.id);
                         layout.toolsTab.selectChild('print-tab');
-                    })
+                    }
                 }));
                 tb.addItem(new Button({
                     toolbarGroup: 'map',
@@ -397,7 +401,34 @@ define([
                     title: 'Draw options',
                     dropDown: this.draw.optionsMenu
                 }));
-
+                
+                //add layer widgets
+                this.addLayerWidgets = {};
+                //add arcgis service
+                this.addLayerWidgets.arcgisService = new AddArcGISService({
+                    overlayControlContainer: this.overlayControlContainer,
+                    vectorControlContainer: this.vectorControlContainer,
+                    onOverlayComplete: function () {
+                        layout.left.selectChild(layout.layersTab.id);
+                        layout.layersTab.selectChild('layers-overlays-tab');
+                    },
+                    onVectorComplete: function () {
+                        layout.left.selectChild(layout.layersTab.id);
+                        layout.layersTab.selectChild('layers-features-tab');
+                    }
+                }, 'add-layers-arcgis');
+                this.addLayerWidgets.arcgisService.startup();
+                
+                //add web tiled service
+                this.addLayerWidgets.webTiledService = new AddWebTiledService({
+                    overlayControlContainer: this.overlayControlContainer,
+                    onOverlayComplete: function () {
+                        layout.left.selectChild(layout.layersTab.id);
+                        layout.layersTab.selectChild('layers-overlays-tab');
+                    }
+                }, 'add-layers-web-tiled');
+                this.addLayerWidgets.webTiledService.startup();
+                
                 //fade out and destroy loading screen
                 setTimeout(function() {
                     baseFx.fadeOut({

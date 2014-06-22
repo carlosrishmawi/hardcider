@@ -1,0 +1,51 @@
+<div class="hardcider-add-layer">
+    <table>
+        <tr>
+            <td>
+                Add an Web Tiled service layer to the map.
+            <td>
+        </tr>
+        <tr>
+            <td>
+                URL Template
+            <td>
+        </tr>
+        <tr>
+            <td>
+                <input data-dojo-attach-point="urlTemplateNode" data-dojo-type="dijit/form/TextBox" style="width:100%;">
+            <td>
+        </tr>
+        <tr>
+            <td>
+                Layer Name
+            <td>
+        </tr>
+        <tr>
+            <td>
+                <input data-dojo-attach-point="nameNode" data-dojo-type="dijit/form/TextBox" style="width:100%;">
+            <td>
+        </tr>
+        
+        <tr>
+            <td>
+                Sub Domains (comma separated)
+            <td>
+        </tr>
+        <tr>
+            <td>
+                <input data-dojo-attach-point="subDomainsNode" data-dojo-type="dijit/form/TextBox" style="width:100%;">
+            <td>
+        </tr>
+        
+        <tr>
+            <td>
+                <span data-dojo-attach-event="click: addLayer" class="hardcider-click">Add Layer</span>
+            <td>
+        </tr>
+        <tr>
+            <td>
+                Note: The service is not validated. Errors in the URL template or sub domains will result in a non-functional layer.
+            <td>
+        </tr>
+    </table>
+</div>

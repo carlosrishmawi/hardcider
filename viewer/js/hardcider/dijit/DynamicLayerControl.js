@@ -267,7 +267,6 @@ define([
             }
             this._addLayer(this.layerInfo, this.controlContainer.map);
         },
-
         toggleLayer: function() {
             var l = this.layer;
             if (l.visible) {
@@ -326,16 +325,17 @@ define([
                 dpi: li.dpi
             });
             this.layer = new Dynamic((li.secured) ? li.url + '?token=' + li.token : li.url, {
-                id: li.id,
+                id: li.id || null,
                 imageParameters: ip,
                 visible: li.visible,
                 opacity: li.opacity
             });
-            this.layer.layerParams = li;
             if (li.secured) {
                 this.layer.url = li.url;
             }
             map.addLayer(this.layer);
+            li.id = this.layer.id;
+            this.layer.layerParams = li;
             this.checkbox = new CheckBox({
                 checked: li.visible,
                 onChange: lang.hitch(this, this.toggleLayer)

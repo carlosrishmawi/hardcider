@@ -534,6 +534,9 @@ p {
 .hardcider-add-layer {
     max-width: 400px;
 }
+.hardcider-add-layer table {
+    width: 100%;
+}
 .hardcider-add-layer-gdb-layers {
     padding: 0 8px;
     border: 1px solid #B5BCC7;

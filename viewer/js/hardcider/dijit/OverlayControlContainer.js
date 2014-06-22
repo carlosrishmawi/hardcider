@@ -15,6 +15,7 @@ define([
     'esri/config',
     'hardcider/dijit/DynamicLayerControl',
     'hardcider/dijit/TiledLayerControl',
+    'hardcider/dijit/ImageLayerControl',
     'hardcider/dijit/WebTiledLayerControl'
 ], function(
     declare,
@@ -27,6 +28,7 @@ define([
     esriConfig,
     DynamicLayerControl,
     TiledLayerControl,
+    ImageLayerControl,
     WebTiledLayerControl
 ) {
     return declare([WidgetBase, Container], {
@@ -59,6 +61,12 @@ define([
                     break;
                 case 'tiled':
                     control = new TiledLayerControl({
+                        controlContainer: this,
+                        layerInfo: layerInfo
+                    });
+                    break;
+                case 'image':
+                    control = new ImageLayerControl({
                         controlContainer: this,
                         layerInfo: layerInfo
                     });

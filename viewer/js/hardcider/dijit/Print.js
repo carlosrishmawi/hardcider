@@ -53,15 +53,15 @@ define([
             options = options || {};
             lang.mixin(this, options);
             if (!this.map) {
-                console.log('UNWCPrint error::map is required');
+                console.log('Print error::map is required');
                 return;
             }
             if (!this.printUrl) {
-                console.log('UNWCPrint error::printUrl is required');
+                console.log('Print error::printUrl is required');
                 return;
             }
             if (!this.templates) {
-                console.log('UNWCPrint error::templates is required');
+                console.log('Print error::templates is required');
                 return;
             }
             //print task

@@ -53,19 +53,20 @@ define(['esri/geometry/Extent'], function(Extent) {
         },
         overlays: [{
             type: 'webTiled',
-            id: 'stamentoner',
             template: 'http://${subDomain}.tile.stamen.com/toner/${level}/${col}/${row}.jpg',
             name: 'Stamen Toner',
             subDomains: ['a', 'b', 'c', 'd'],
             copyright: 'Map tiles by <a href="http://stamen.com">Stamen Design</a>, under <a href="http://creativecommons.org/licenses/by/3.0">CC BY 3.0</a>. Data by <a href="http://openstreetmap.org">OpenStreetMap</a>, under <a href="http://creativecommons.org/licenses/by-sa/3.0">CC BY SA</a>.'
         }, {
+            type: 'image',
+            url: 'http://navigator.state.or.us/arcgis/rest/services/Framework/Imagery_Mosaic2011/ImageServer',
+            name: 'Oregon Imagery 2011'
+        }, {
             type: 'tiled',
-            id: 'oregonstreet',
             url: 'http://navigator.state.or.us/arcgis/rest/services/BaseMaps/BaseMap_Streets_Cache_WM/MapServer',
             name: 'Oregon Street Map'
         }, {
             type: 'tiled',
-            id: 'soilsurveymap',
             url: 'https://server.arcgisonline.com/arcgis/rest/services/Specialty/Soil_Survey_Map/MapServer',
             name: 'Soil Survey Map',
             opacity: 0.6,
@@ -74,17 +75,14 @@ define(['esri/geometry/Extent'], function(Extent) {
             query: true
         }, {
             type: 'dynamic',
-            id: 'oregonhydro',
             url: 'http://navigator.state.or.us/arcgis/rest/services/Framework/Hydro_GeneralMap_WM/MapServer',
             name: 'Oregon Hydrography'
         }, {
             type: 'dynamic',
-            id: 'femaflood',
             url: 'http://hazards.fema.gov/gis/nfhl/rest/services/public/NFHL/MapServer',
             name: 'FEMA Flood'
         }, {
             type: 'dynamic',
-            id: 'oregonadmin',
             url: 'http://navigator.state.or.us/arcgis/rest/services/Framework/Admin_Bounds_WM/MapServer',
             name: 'Oregon Administrative Boundaries'
         }],

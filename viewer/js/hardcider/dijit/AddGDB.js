@@ -47,7 +47,7 @@ define([
         _getLayers: function(node) {
             this._collections = null;
             this.layersNode.innerHTML = '<div class="hardcider-add-layer-gdb-layer"><i class="fa fa-spinner fa-spin"></i> Getting layers...</div>';
-            fgdb(node.files).then(lang.hitch(this, this._displayLayers), lang.hitch(this, function(e) {
+            window.fgdb(node.files).then(lang.hitch(this, this._displayLayers), lang.hitch(this, function(e) {
                 console.log(e);
                 this.layersNode.innerHTML = '<div class="hardcider-add-layer-gdb-layer">No Layers</div>';
                 this.map.alert('The zip file or files uploaded are not valid.', 'Geodatabase Error');

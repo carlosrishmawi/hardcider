@@ -42,6 +42,7 @@ define([
             this.node = node;
         },
         build: function() {
+            //the border container
             this.bc = new BC({
                 liveSplitters: true,
                 design: 'sidebar',
@@ -49,6 +50,7 @@ define([
                 style: 'width:100%;height:100%;z-index:1;'
             }, this.node);
             this.bc.startup();
+            //left region tabs
             this.left = new TC({
                 id: 'left',
                 region: 'left',
@@ -57,15 +59,18 @@ define([
                 minSize: 260
             });
             this.bc.addChild(this.left);
+            //left region layer tab
             this.layersTab = new TC({
                 title: 'Layers',
                 nested: true
             });
             this.layersTab.addChild(new CP({
+                id: 'layers-overlays-tab',
                 title: 'Overlays',
                 content: '<div id="layers-overlays"></div>'
             }));
             this.layersTab.addChild(new CP({
+                id: 'layers-features-tab',
                 title: 'Features',
                 content: '<div id="layers-features"></div>'
             }));
@@ -74,32 +79,28 @@ define([
                 nested: true
             });
             this.addLayersTab.addChild(new CP({
-                title: 'ArcGIS Dynamic/Tiled',
-                content: '<div id="add-layers-arcgis-dynamic-tiled"></div>'
+                title: 'ArcGIS Service',
+                content: '<div id="add-layers-arcgis"></div>'
             }));
             this.addLayersTab.addChild(new CP({
-                title: 'ArcGIS Feature',
-                content: '<div id="add-layers-arcgis-feature"></div>'
-            }));
-            this.addLayersTab.addChild(new CP({
-                title: 'Web Tiled',
+                title: 'Web Tiled Service',
                 content: '<div id="add-layers-web-tiled"></div>'
             }));
             this.addLayersTab.addChild(new CP({
                 title: 'CSV File',
-                content: '<div id="add-layers-csv"></div>'
+                content: '<div id="add-layers-csv">In the works...</div>'
             }));
             this.addLayersTab.addChild(new CP({
-                title: 'GeoJSON',
-                content: '<div id="add-layers-geojson"></div>'
+                title: 'GeoJSON File',
+                content: '<div id="add-layers-geojson">In the works...</div>'
             }));
             this.addLayersTab.addChild(new CP({
                 title: 'Shape File',
-                content: '<div id="add-layers-shape"></div>'
+                content: '<div id="add-layers-shape">In the works...</div>'
             }));
             this.addLayersTab.addChild(new CP({
                 title: 'Geodatabase (GDB) Feature Classes',
-                content: '<div id="add-layers-gdb"></div>'
+                content: '<div id="add-layers-gdb">In the works...</div>'
             }));
             this.layersTab.addChild(this.addLayersTab);
             this.left.addChild(this.layersTab);
