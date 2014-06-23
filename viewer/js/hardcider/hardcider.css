@@ -284,6 +284,7 @@ p {
 .hardcider-click {
     cursor: pointer;
     color: #369;
+    font-size: 110%;
     text-decoration: none;
     -webkit-user-select: none;
     -moz-user-select: none;

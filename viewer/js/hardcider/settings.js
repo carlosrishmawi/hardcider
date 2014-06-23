@@ -26,6 +26,11 @@ define(['esri/geometry/Extent'], function(Extent) {
             mapboxMapId: 'btfou.i2j794p6', //please use your mapbox map - thanks
             defaultBasemap: 'bm_mapbox'
         },
+        save: {
+            couchDbUrl: '',
+            couchDbName: '',
+            pouchDbName: ''
+        },
         print: {
             url: 'http://www.example.com/arcgis/rest/services/My_Print_Task/GPServer/Export%20Web%20Map', //not real
             templates: {
