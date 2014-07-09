@@ -150,6 +150,7 @@ define([
                 nested: true
             });
             this.toolsTab.addChild(new CP({
+                id: 'measure-tab',
                 title: 'Measure',
                 content: '<div id="measure"></div>'
             }));

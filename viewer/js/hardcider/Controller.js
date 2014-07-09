@@ -223,33 +223,6 @@ define([
                 }));
                 tb.addItem(new Button({
                     toolbarGroup: 'map',
-                    label: 'Geocoder',
-                    showLabel: false,
-                    iconClass: 'iconSearchBox',
-                    title: 'Show geocoder',
-                    onClick: function() {
-                        if (domStyle.get(geocoder.domNode, 'display') === 'block') {
-                            geocoder.hide();
-                            this.set('title', 'Show geocoder');
-                        } else {
-                            geocoder.show();
-                            this.set('title', 'Hide geocoder');
-                        }
-                    }
-                }));
-                tb.addItem(new Button({
-                    toolbarGroup: 'map',
-                    label: 'Print',
-                    showLabel: false,
-                    iconClass: 'iconPrint',
-                    title: 'Print a PDF of the map',
-                    onClick: function() {
-                        layout.left.selectChild(layout.toolsTab.id);
-                        layout.toolsTab.selectChild('print-tab');
-                    }
-                }));
-                tb.addItem(new Button({
-                    toolbarGroup: 'map',
                     label: 'Save',
                     showLabel: false,
                     iconClass: 'iconDisk',
@@ -266,6 +239,47 @@ define([
                     title: 'Load a map',
                     onClick: function() {
                         map.alert('Sorry no map load...yet.');
+                    }
+                }));
+                tb.addItem(new ToolbarSeparator({
+                    toolbarGroup: 'map'
+                }));
+                tb.addItem(new Button({
+                    toolbarGroup: 'map',
+                    label: 'Geocoder',
+                    showLabel: false,
+                    iconClass: 'iconSearchBox',
+                    title: 'Show geocoder',
+                    onClick: function() {
+                        if (domStyle.get(geocoder.domNode, 'display') === 'block') {
+                            geocoder.hide();
+                            this.set('title', 'Show geocoder');
+                        } else {
+                            geocoder.show();
+                            this.set('title', 'Hide geocoder');
+                        }
+                    }
+                }));
+                tb.addItem(new Button({
+                    toolbarGroup: 'map',
+                    label: 'Measure',
+                    showLabel: false,
+                    iconClass: 'iconMeasure',
+                    title: 'Measure location, distance and area',
+                    onClick: function() {
+                        layout.left.selectChild(layout.toolsTab.id);
+                        layout.toolsTab.selectChild('measure-tab');
+                    }
+                }));
+                tb.addItem(new Button({
+                    toolbarGroup: 'map',
+                    label: 'Print',
+                    showLabel: false,
+                    iconClass: 'iconPrint',
+                    title: 'Print a PDF of the map',
+                    onClick: function() {
+                        layout.left.selectChild(layout.toolsTab.id);
+                        layout.toolsTab.selectChild('print-tab');
                     }
                 }));
                 tb.addItem(new ToolbarSeparator({
