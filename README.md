@@ -5,13 +5,13 @@ A viewer built with the [ESRI JavaScript API](https://developers.arcgis.com/java
 
 ####[View Demo](http://btfou.github.io/hardcider/)
 
-Demo currently running: https://github.com/btfou/hardcider/releases/tag/v0.3.1
+Demo currently running: [v0.3.1](https://github.com/btfou/hardcider/releases/tag/v0.3.1)
 
 ####Getting Started
 
 Simply fork or download this repo.
 
-Basic map parameters and layers to load can be configured in the `settings.js` file.
+Basic map parameters and layers to load can be configured in `viewer/js/hardcider/settings.js`.
 
 Beyond that, knowledge of JavaScript, Dojo and the ESRI JavaScript API are required.
 
@@ -28,7 +28,17 @@ Questions, comments and issues are welcome [here](https://github.com/btfou/hardc
 
 Do yourself a favor and check out these awesome projects. They make me look good, and they will do the same for you.
 
-[ESRI JavaScript API](https://developers.arcgis.com/javascript/) [Dojo](http://dojotoolkit.org/) [dgrid](http://dojofoundation.org/packages/dgrid/) [Font Awesome](http://fortawesome.github.io/Font-Awesome/) [Pouch DB](http://pouchdb.com/) [Couch DB](http://couchdb.apache.org/) [es5-shim](https://github.com/es-shims/es5-shim) [Terraformer](http://terraformer.io/) [Blob.js](https://github.com/eligrey/Blob.js) [FileSaver.js](https://github.com/eligrey/FileSaver.js) [Grunt](http://gruntjs.com/)
+* [ESRI JavaScript API](https://developers.arcgis.com/javascript/)
+* [Dojo](http://dojotoolkit.org/)
+* [dgrid](http://dojofoundation.org/packages/dgrid/)
+* [Font Awesome](http://fortawesome.github.io/Font-Awesome/)
+* [Pouch DB](http://pouchdb.com/)
+* [Couch DB](http://couchdb.apache.org/)
+* [es5-shim](https://github.com/es-shims/es5-shim)
+* [Terraformer](http://terraformer.io/)
+* [Blob.js](https://github.com/eligrey/Blob.js)
+* [FileSaver.js](https://github.com/eligrey/FileSaver.js)
+* [Grunt](http://gruntjs.com/)
 
 ####License
 The MIT License (MIT)
