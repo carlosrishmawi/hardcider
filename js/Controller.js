@@ -4,7 +4,7 @@
  * here's where the app is built
  */
 define([
-    './settings.js', //app settings
+    './js/settings.js', //app settings
     'dojo/_base/array', //dojo base and dom
     'dojo/_base/lang',
     'dojo/_base/fx',
