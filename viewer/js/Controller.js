@@ -1,39 +1,38 @@
 /*
- * Copyright (c) 2014 Ben Fousek
  * https://github.com/btfou/hardcider
+ *
+ * here's where the app is built
  */
 define([
-    'dojo/_base/array',
+    './settings.js', //app settings
+    'dojo/_base/array', //dojo base and dom
     'dojo/_base/lang',
     'dojo/_base/fx',
     'dojo/dom-construct',
     'dojo/dom-style',
-    'hardcider/settings',
-    'hardcider/Layout',
-    'hardcider/Map',
-    'hardcider/iquert/IQueRT',
-    'hardcider/draw/Draw',
-    'hardcider/draw/DrawProjects',
-    'hardcider/dijit/OverlayControlContainer',
-    'hardcider/dijit/VectorControlContainer',
-    'hardcider/dijit/Measure',
-    'hardcider/dijit/Print',
-    'hardcider/dijit/AddArcGISService',
-    'hardcider/dijit/AddWebTiledService',
-    'dijit/form/Button',
+    'hardcider/Layout', //the layout class builds and controls the layout
+    'hardcider/Map', //extended map class
+    'hardcider/iquert/IQueRT', //Identify Query Results Tables - all in one
+    'hardcider/draw/Draw', //draw module
+    'hardcider/draw/DrawProjects', //draw projects saving
+    'hardcider/dijit/OverlayControlContainer', //overlay layers control container (just don't call it a TOC)
+    'hardcider/dijit/VectorControlContainer', //vector layers control container (just don't call it a TOC)
+    'hardcider/dijit/Measure', //measure
+    'hardcider/dijit/AddArcGISService', //add ags services widget
+    'hardcider/dijit/AddWebTiledService', //add web tiled widget
+    'dijit/form/Button', //a few dijits for the toolbar
     'dijit/form/DropDownButton',
     'dijit/ToolbarSeparator',
     'dijit/Menu',
     'dijit/MenuItem',
-    'esri/geometry/Extent',
-    'esri/dijit/Geocoder'
+    'esri/dijit/Geocoder' //esri geocode
 ], function(
+    settings,
     array,
     lang,
     baseFx,
     domConst,
     domStyle,
-    settings,
     Layout,
     Map,
     IQueRT,
@@ -42,7 +41,6 @@ define([
     OverlayControlContainer,
     VectorControlContainer,
     Measure,
-    Print,
     AddArcGISService,
     AddWebTiledService,
     Button,
@@ -50,11 +48,11 @@ define([
     ToolbarSeparator,
     Menu,
     MenuItem,
-    Extent,
     Geocoder
 ) {
     'use strict';
     return {
+        //rock and roll
         build: function(loadingNode, applicationNode) {
             if (!loadingNode || !applicationNode) {
                 console.log('Controller error::loadingNode and applicationNode are required');
@@ -68,8 +66,9 @@ define([
             this.map = new Map('map-panel', settings.map);
 
             //let's do the rest after map loads
-            //so many classes require a loaded map
-            //this prevents all map not loaded errors 
+            // so many classes require a loaded map
+            // this prevents all map not loaded errors
+            // seems to load smoother and w/o performance loss
             this.map.on('load', lang.hitch(this, function(r) {
                 //the map and layout objects
                 var map = r.map,
@@ -162,14 +161,6 @@ define([
                 }, 'measure');
                 measure.startup();
 
-                //print
-                var print = new Print({
-                    map: map,
-                    printUrl: settings.print.url,
-                    templates: settings.print.templates
-                }, 'print');
-                print.startup();
-
                 //build toolbar
                 var tb = layout.toolbar;
                 //map toolbar
@@ -221,7 +212,10 @@ define([
                 tb.addItem(new ToolbarSeparator({
                     toolbarGroup: 'map'
                 }));
-                tb.addItem(new Button({
+                
+                
+                //awaiting map save
+                /*tb.addItem(new Button({
                     toolbarGroup: 'map',
                     label: 'Save',
                     showLabel: false,
@@ -243,23 +237,9 @@ define([
                 }));
                 tb.addItem(new ToolbarSeparator({
                     toolbarGroup: 'map'
-                }));
-                tb.addItem(new Button({
-                    toolbarGroup: 'map',
-                    label: 'Geocoder',
-                    showLabel: false,
-                    iconClass: 'iconSearchBox',
-                    title: 'Show geocoder',
-                    onClick: function() {
-                        if (domStyle.get(geocoder.domNode, 'display') === 'block') {
-                            geocoder.hide();
-                            this.set('title', 'Show geocoder');
-                        } else {
-                            geocoder.show();
-                            this.set('title', 'Hide geocoder');
-                        }
-                    }
-                }));
+                }));*/
+                
+                
                 tb.addItem(new Button({
                     toolbarGroup: 'map',
                     label: 'Measure',
@@ -282,9 +262,27 @@ define([
                         layout.toolsTab.selectChild('print-tab');
                     }
                 }));
+                tb.addItem(new Button({
+                    toolbarGroup: 'map',
+                    label: 'Geocoder',
+                    showLabel: false,
+                    iconClass: 'iconSearchBox',
+                    title: 'Show geocoder',
+                    onClick: function() {
+                        if (domStyle.get(geocoder.domNode, 'display') === 'block') {
+                            geocoder.hide();
+                            this.set('title', 'Show geocoder');
+                        } else {
+                            geocoder.show();
+                            this.set('title', 'Hide geocoder');
+                        }
+                    }
+                }));
                 tb.addItem(new ToolbarSeparator({
                     toolbarGroup: 'map'
                 }));
+                
+                //custom map toolbar items here
 
                 //draw toolbar
                 tb.addItem(new DropDownButton({
@@ -417,7 +415,7 @@ define([
                 }));
                 
                 //add layer widgets
-                this.addLayerWidgets = {};
+                this.addLayerWidgets = {}; //for easy debugging
                 //add arcgis service
                 this.addLayerWidgets.arcgisService = new AddArcGISService({
                     overlayControlContainer: this.overlayControlContainer,

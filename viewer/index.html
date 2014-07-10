@@ -4,27 +4,59 @@
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta name="description" content="Hard Cider">
+    <meta name="description" content="Hard Cider...btfou's js map viewer">
     <meta name="author" content="btfou">
     <title>Hard Cider</title>
     <link href="//fonts.googleapis.com/css?family=Open+Sans:400,600,800" rel="stylesheet">
     <link href="//netdna.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.css" rel="stylesheet">
-    <link href="//js.arcgis.com/3.9/js/dojo/dijit/themes/claro/claro.css" rel="stylesheet">
-    <!--link href="//js.arcgis.com/3.9/js/dojo/dojox/layout/resources/FloatingPane.css" rel="stylesheet"-->
-    <!--link href="//js.arcgis.com/3.9/js/dojo/dojox/layout/resources/ResizeHandle.css" rel="stylesheet"-->
-    <link href="//js.arcgis.com/3.9/js/dgrid/css/dgrid.css" rel="stylesheet">
-    <link href="//js.arcgis.com/3.9/js/dgrid/css/skins/claro.css" rel="stylesheet">
-    <link href="//js.arcgis.com/3.9/js/esri/css/esri.css" rel="stylesheet">
+    <link href="//js.arcgis.com/3.10compact/js/dojo/dijit/themes/claro/claro.css" rel="stylesheet">
+    <!--link href="//js.arcgis.com/3.10compact/js/dojo/dojox/layout/resources/FloatingPane.css" rel="stylesheet"-->
+    <!--link href="//js.arcgis.com/3.10compact/js/dojo/dojox/layout/resources/ResizeHandle.css" rel="stylesheet"-->
+    <link href="//js.arcgis.com/3.10compact/js/dgrid/css/dgrid.css" rel="stylesheet">
+    <link href="//js.arcgis.com/3.10compact/js/dgrid/css/skins/claro.css" rel="stylesheet">
+    <link href="//js.arcgis.com/3.10compact/js/esri/css/esri.css" rel="stylesheet">
+    <!-- hardcider includes all css at this point - a widget should load its own css using xstyle -->
     <link href="js/hardcider/hardcider.css" rel="stylesheet">
+    <style type="text/css">
+    /* loading */
+    /* located here for easy manipulation */
+    #loading {
+        z-index: 9999;
+        position: absolute;
+        top: 0;
+        right: 0;
+        bottom: 0;
+        left: 0;
+        background: #B5BCC7 url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAJYAAACWCAMAAAAL34HQAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAAAlQTFRF1trgyM3VtbzHA1Ju9AAAAIdJREFUeNrs17ENAAAERUHsP7QJJLrfnFZzCc2r6mPCizkmusDCwsLCwsLCwsLCwsJKseSr38LCwsLCwsLCwsLCwpKv8hULCwsLCwsLCwsLCwtLvjoiFhYWFhYWFhYWFhaWfJWvfgsLCwsLCwsLCwsLC0u+ylcsLCwsLCwsLCwsLCys72IFGAA1yKjB1P3ogAAAAABJRU5ErkJggg==) -1px -1px;
+    }
+    #loading-content {
+        width: 300px;
+        height: 90px;
+        margin: auto;
+        position: absolute;
+        top: 0;
+        left: 0;
+        bottom: 0;
+        right: 0;
+        padding: 20px;
+        background: #FFF;
+        -webkit-border-radius: 12px;
+        border-radius: 12px;
+        -webkit-box-shadow: 4px 4px 20px 2px rgba(128, 128, 128, 0.5);
+        box-shadow: 4px 4px 20px 2px rgba(128, 128, 128, 0.5);
+    }
+    </style>
 </head>
 <body class="claro">
+    <!-- do something to cover unseemly loading of app -->
     <div id="loading">
         <div id="loading-content">
             <p style="margin:0;font-size:300%;font-weight:800;line-height:1;"><em>Hard Cider</em></p>
-            <p style="margin:12px 0;font-size:120%;font-weight:600;line-height:1;"><i class="fa fa-spinner fa-spin"></i>&nbsp;One moment while map loads...</p>
+            <p style="margin:12px 0;font-size:120%;font-weight:600;line-height:1;"><i class="fa fa-spinner fa-spin"></i>&nbsp;Just one moment...</p>
             <p style="margin:12px 0;line-height:1;">Copyright &copy; 2014 Ben Fousek</p>
         </div>
     </div>
+    <!-- a single dom node to build the app -->
     <div id="container"></div>
     <!-- terraformer -->
     <script src="//cdn-geoweb.s3.amazonaws.com/terraformer/1.0.3/terraformer.min.js"></script>
@@ -36,21 +68,24 @@
     <script src="js/xtras/es5-shim.min.js"></script>
     <script src="js/xtras/pouchdb-2.1.0.min.js"></script>
     <!-- parse .gdb and .shp files on client -->
-    <script src="js/xtras/fgdb.min.js"></script>
+    <!--script src="js/xtras/fgdb.min.js"></script-->
     <script>
         dojoConfig = {
             async: true,
             packages: [{
                 name: 'hardcider',
                 location: location.pathname.replace(/[^\/]+$/, '') + 'js/hardcider'
+            }, {
+                name: 'custom',
+                location: location.pathname.replace(/[^\/]+$/, '') + 'js/custom'
             }]
         };
     </script>
-    <script src="//js.arcgis.com/3.9compact/"></script>
+    <script src="//js.arcgis.com/3.10compact/"></script>
     <script>
         var app; //dev only
         require([
-            'hardcider/Controller',
+            './js/Controller.js',
             'dojo/domReady!'
         ], function (Controller) {
             Controller.build('loading', 'container');

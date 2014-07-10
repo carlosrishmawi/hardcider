@@ -1,6 +1,8 @@
 /*
- * Copyright (c) 2014 Ben Fousek
  * https://github.com/btfou/hardcider
+ *
+ * the hardcider map class
+ * extends esri/map with some handy extras
  */
 define([
     'dojo/_base/declare',
@@ -17,9 +19,7 @@ define([
     'esri/toolbars/draw',
     'esri/toolbars/edit',
     'esri/toolbars/navigation',
-    'esri/config',
     'dojo/i18n!esri/nls/jsapi',
-    'esri/tasks/GeometryService',
     'esri/units',
     'esri/symbols/jsonUtils',
     'esri/dijit/LayerSwipe',
@@ -44,9 +44,7 @@ define([
     Draw,
     Edit,
     Nav,
-    esriConfig,
     esriBundle,
-    GeometryService,
     Units,
     symbolJsonUtils,
     LayerSwipe,
@@ -83,11 +81,6 @@ define([
             area: Units.ACRES
         },
         constructor: function(srcNodeRef, options) {
-            //config
-            esriConfig.defaults.io.proxyUrl = options.proxyUrl || null;
-            esriConfig.defaults.io.alwaysUseProxy = (options.alwaysUseProxy === undefined) ? false : options.alwaysUseProxy;
-            esriConfig.defaults.geometryService = (options.geometryServiceUrl) ? new GeometryService(options.geometryServiceUrl) : null;
-
             //toolbars
             this.drawToolbar = new Draw(this);
             this.editToolbar = new Edit(this);

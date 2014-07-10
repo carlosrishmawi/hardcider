@@ -157,7 +157,7 @@ define([
             this.toolsTab.addChild(new CP({
                 id: 'print-tab',
                 title: 'Print',
-                content: '<div id="print"></div>'
+                content: '<div id="print">Hi. I\'m where a print widget would go. Hardcider does not come with a print widget. Printing is so personal. Should you wish a use this div, it\'s dom node id is "print".</div>'
             }));
             this.left.addChild(this.toolsTab);
             this.right = new TC({

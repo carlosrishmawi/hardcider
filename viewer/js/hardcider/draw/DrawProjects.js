@@ -1,6 +1,7 @@
 /*
- * Copyright (c) 2014 Ben Fousek
  * https://github.com/btfou/hardcider
+ *
+ * draw projects is ready for an overhaul
  */
 define([
     'dojo/_base/declare',
@@ -67,11 +68,14 @@ define([
                     dbName: this.pouchDbName
                 });
             }
-            if (this.couchDbUrl) {
+            
+            //couch based draw saving is on its way out
+            /*if (this.couchDbUrl) {
                 couchDbUtils.validateDatabase(this.couchDbUrl).then(lang.hitch(this, function() {
                     this._couch = true;
                 }));
-            }
+            }*/
+            
             this.menu = new Menu();
             this.menu.addChild(new MenuItem({
                 label: 'New Project',

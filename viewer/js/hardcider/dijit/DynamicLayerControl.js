@@ -1,6 +1,7 @@
 /*
- * Copyright (c) 2014 Ben Fousek
  * https://github.com/btfou/hardcider
+ *
+ * ags dynamic layer loader and control
  */
 define([
     'dojo/_base/declare',
@@ -376,54 +377,61 @@ define([
                     }
                 }));
                 on(this.layer, 'load', lang.hitch(this, function() {
+                    this._createLayerMenu();
                     this._addSublayers();
                 }));
             } else {
                 domClass.remove(this.expandIconNode, ['fa', 'fa-plus-square-o', 'hardcider-layer-icon']);
                 domStyle.set(this.expandIconNode, 'cursor', 'default');
                 domConst.destroy(this.expandNode);
+                on(this.layer, 'load', lang.hitch(this, function() {
+                    this._createLayerMenu();
+                }));
             }
-            this._createLayerMenu();
         },
         _addSublayers: function() {
-            array.forEach(this.layer.layerInfos, lang.hitch(this, function(info) {
-                var pid = info.parentLayerId,
-                    slids = info.subLayerIds,
-                    control;
-                if (pid === -1 && slids === null) {
-                    //it's a top level sublayer
-                    control = new SublayerControl({
-                        id: this.layer.id + '-' + info.id + '-sublayer-control',
-                        controller: this,
-                        sublayerInfo: info
-                    });
-                    domConst.place(control.domNode, this.expandNode, 'last');
-                } else if (pid === -1 && slids !== null) {
-                    //it's a top level folder
-                    control = new FolderControl({
-                        id: this.layer.id + '-' + info.id + '-sublayer-control',
-                        controller: this,
-                        folderInfo: info
-                    });
-                    domConst.place(control.domNode, this.expandNode, 'last');
-                } else if (pid !== -1 && slids !== null) {
-                    //it's a nested folder
-                    control = new FolderControl({
-                        id: this.layer.id + '-' + info.id + '-sublayer-control',
-                        controller: this,
-                        folderInfo: info
-                    });
-                    domConst.place(control.domNode, registry.byId(this.layer.id + '-' + info.parentLayerId + '-sublayer-control').expandNode, 'last');
-                } else if (pid !== -1 && slids === null) {
-                    //it's a nested sublayer
-                    control = new SublayerControl({
-                        id: this.layer.id + '-' + info.id + '-sublayer-control',
-                        controller: this,
-                        sublayerInfo: info
-                    });
-                    domConst.place(control.domNode, registry.byId(this.layer.id + '-' + info.parentLayerId + '-sublayer-control').expandNode, 'last');
-                }
-            }));
+            //check for single layer
+            //if so no sublayer/folder controls
+            if (this.layer.layerInfos.length > 1) {
+                array.forEach(this.layer.layerInfos, lang.hitch(this, function(info) {
+                    var pid = info.parentLayerId,
+                        slids = info.subLayerIds,
+                        control;
+                    if (pid === -1 && slids === null) {
+                        //it's a top level sublayer
+                        control = new SublayerControl({
+                            id: this.layer.id + '-' + info.id + '-sublayer-control',
+                            controller: this,
+                            sublayerInfo: info
+                        });
+                        domConst.place(control.domNode, this.expandNode, 'last');
+                    } else if (pid === -1 && slids !== null) {
+                        //it's a top level folder
+                        control = new FolderControl({
+                            id: this.layer.id + '-' + info.id + '-sublayer-control',
+                            controller: this,
+                            folderInfo: info
+                        });
+                        domConst.place(control.domNode, this.expandNode, 'last');
+                    } else if (pid !== -1 && slids !== null) {
+                        //it's a nested folder
+                        control = new FolderControl({
+                            id: this.layer.id + '-' + info.id + '-sublayer-control',
+                            controller: this,
+                            folderInfo: info
+                        });
+                        domConst.place(control.domNode, registry.byId(this.layer.id + '-' + info.parentLayerId + '-sublayer-control').expandNode, 'last');
+                    } else if (pid !== -1 && slids === null) {
+                        //it's a nested sublayer
+                        control = new SublayerControl({
+                            id: this.layer.id + '-' + info.id + '-sublayer-control',
+                            controller: this,
+                            sublayerInfo: info
+                        });
+                        domConst.place(control.domNode, registry.byId(this.layer.id + '-' + info.parentLayerId + '-sublayer-control').expandNode, 'last');
+                    }
+                }));
+            }
             if (this.layer.version >= 10.01) {
                 esriRest.getLegend(this.layer).then(lang.hitch(this, this._createLegends));
             }
@@ -437,7 +445,13 @@ define([
                     legendContent += '<tr><td><img class="' + this.layer.id + '-legend-image hardcider-layer-legend-image" style="width:' + legend.width + ';height:' + legend.height + ';" src="data:' + legend.contentType + ';base64,' + legend.imageData + '" alt="' + label + '" /></td><td class="hardcider-layer-legend-label">' + label + '</td></tr>';
                 }, this);
                 legendContent += '</table>';
-                registry.byId(this.layer.id + '-' + layer.layerId + '-sublayer-control').expandNode.innerHTML = legendContent;
+                //check for single layer
+                //if so use expand node for legend
+                if (this.layer.layerInfos.length > 1) {
+                    registry.byId(this.layer.id + '-' + layer.layerId + '-sublayer-control').expandNode.innerHTML = legendContent;
+                } else {
+                    this.expandNode.innerHTML = legendContent;
+                }
             }, this);
             array.forEach(query('.' + this.layer.id + '-legend-image'), function(img) {
                 domStyle.set(img, 'opacity', this.layer.opacity);
@@ -503,6 +517,53 @@ define([
                     })
                 }));
                 menu.addChild(new MenuSeparator());
+            }
+            //check for single layer
+            //if so add identify and query
+            if (layer.layerInfos.length === 1) {
+                if (li.identify) {
+                    var idMenu = new Menu();
+                    idMenu.addChild(new MenuItem({
+                        label: 'Point',
+                        onClick: lang.hitch(this, function() {
+                            controlContainer.identify(layer, 'point', 0);
+                        })
+                    }));
+                    idMenu.addChild(new MenuItem({
+                        label: 'Extent',
+                        onClick: lang.hitch(this, function() {
+                            controlContainer.identify(layer, 'extent', 0);
+                        })
+                    }));
+                    idMenu.addChild(new MenuItem({
+                        label: 'Polygon',
+                        onClick: lang.hitch(this, function() {
+                            controlContainer.identify(layer, 'polygon', 0);
+                        })
+                    }));
+                    idMenu.startup();
+                    menu.addChild(new PopupMenuItem({
+                        label: 'Identify',
+                        popup: idMenu
+                    }));
+                }
+                if (li.query) {
+                    menu.addChild(new MenuItem({
+                        label: 'Query',
+                        onClick: lang.hitch(this, function() {
+                            controlContainer.query(layer, 0);
+                        })
+                    }));
+                    menu.addChild(new MenuItem({
+                        label: 'Query Builder',
+                        onClick: lang.hitch(this, function() {
+                            controlContainer.queryBuilder(layer, 0);
+                        })
+                    }));
+                }
+                if (li.identify || li.query) {
+                    menu.addChild(new MenuSeparator());
+                }
             }
             menu.addChild(new MenuItem({
                 label: 'Zoom to Layer Extent',

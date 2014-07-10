@@ -1,9 +1,27 @@
 /*
- * Copyright (c) 2014 Ben Fousek
  * https://github.com/btfou/hardcider
+ *
+ * the app settings
  */
-define(['esri/geometry/Extent'], function(Extent) {
+ /*
+ * https://github.com/btfou/hardcider
+ *
+ * here's the settings
+ */
+define(['esri/config', 'esri/tasks/GeometryService', 'esri/geometry/Extent'], function(esriConfig, GeometryService, Extent) {
+    'use strict';
+    
+    // esri config
+    esriConfig.defaults.io.proxyUrl = 'proxy/proxy.php';
+    esriConfig.defaults.io.alwaysUseProxy = false;
+    esriConfig.defaults.geometryService = new GeometryService('http://tasks.arcgisonline.com/ArcGIS/rest/services/Geometry/GeometryServer');
+    
+    //tokens as needed
+    var token = '0lTAViIV_3wdCFi5WkN9Yt1UYZ1IEwVFKNmmZskaVDk9rj-6XV14zt8a7eJP-NDBFo_RCmZjPR56RYmbvIgDJOoThlC9iBQTHZcSJYJo0b-aRlVvXfRBXWXjqLJH0kJq';
+    
     return {
+        //the map settings
+        // all esri map options and any custom options
         map: {
             basemap: null,
             //center: [-123.49, 45.86],
@@ -20,24 +38,22 @@ define(['esri/geometry/Extent'], function(Extent) {
             }),
             showAttribution: true,
             logo: false,
-            proxyUrl: 'proxy/proxy.php',
-            geometryServiceUrl: 'http://tasks.arcgisonline.com/ArcGIS/rest/services/Geometry/GeometryServer',
+            //custom map options - basically basemap options
             bingMapsKey: 'Ao8BC5dsixV4B1uhNaUAK_ejjm6jtZ8G3oXQ5c5Q-WtmpORHOMklBvzqSIEXwdxe', //please use your key - thanks
             mapboxMapId: 'btfou.i2j794p6', //please use your mapbox map - thanks
             defaultBasemap: 'bm_mapbox'
         },
-        save: {
-            couchDbUrl: '',
-            couchDbName: '',
-            pouchDbName: ''
-        },
+        //hardcider has no print task
+        // but this is a great place for your custom print task settings
         print: {
-            url: 'http://www.example.com/arcgis/rest/services/My_Print_Task/GPServer/Export%20Web%20Map', //not real
+            url: 'http://www.example.com/arcgis/rest/services/My_Print_Task/GPServer/Export%20Web%20Map',
             templates: {
                 'Letter Landscape': 'Letter ANSI A Landscape',
                 'Letter Portrait': 'Letter ANSI A Portrait'
             }
         },
+        //draw projects needs a going over
+        // local save only
         drawProjects: {
             pouchDbName: 'hardcider-drawing-projects', //changing this is going to leave folks without their projects! set it and forget it!
             couchDbUrl: 'http://localhost:5984/hardcider-drawing-projects',
@@ -56,6 +72,9 @@ define(['esri/geometry/Extent'], function(Extent) {
             //    });
             //}
         },
+        //overlay layers
+        // any and all image based layers
+        // currently ags dynamic, tiled & image, and web tiled
         overlays: [{
             type: 'webTiled',
             template: 'http://${subDomain}.tile.stamen.com/toner/${level}/${col}/${row}.jpg',
@@ -91,6 +110,9 @@ define(['esri/geometry/Extent'], function(Extent) {
             url: 'http://navigator.state.or.us/arcgis/rest/services/Framework/Admin_Bounds_WM/MapServer',
             name: 'Oregon Administrative Boundaries'
         }],
+        //feature layers
+        // the vector layers currently just ags feature layers
+        // geojson, shp, gdb, etc in the works or planned
         features: [{
             type: 'feature',
             id: 'orfarmersmarkets',

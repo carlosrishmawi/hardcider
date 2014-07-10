@@ -11,7 +11,7 @@ Demo currently running: [v0.3.1](https://github.com/btfou/hardcider/releases/tag
 
 Simply fork or download this repo.
 
-Basic map parameters and layers to load can be configured in `viewer/js/hardcider/settings.js`.
+Basic map parameters and layers to load can be configured in `viewer/js/settings.js`.
 
 Beyond that, knowledge of JavaScript, Dojo and the ESRI JavaScript API are required.
 
