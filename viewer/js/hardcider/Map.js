@@ -270,7 +270,7 @@ define([
                     type: type || 'vertical',
                     map: this,
                     layers: [layer]
-                }, domConst.create('div', {}, this.id, 'last'));
+                }, domConst.create('div', {}, this.id, 'first'));
                 this._swiper.startup();
                 this._swiper.exitMenuItem = new MenuItem({
                     label: 'Exit Layer Swipe',
